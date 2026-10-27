@@ -693,7 +693,7 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem}
 
 /* ── AD BANNERS (uploaded from Admin → Ads / Banners) ── */
 .ad-banner-wrap{max-width:1200px;margin:2rem auto 0;padding:0 1.5rem}
-.ad-slider{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 14px 40px rgba(15,23,42,0.16);background:#E9EEF5;touch-action:pan-y;transition:height 0.4s ease}
+.ad-slider{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 14px 40px rgba(15,23,42,0.16);background:#E9EEF5;touch-action:pan-y;margin:0 auto;transition:height 0.4s ease}
 .ad-track{display:flex;align-items:flex-start;transition:transform 0.6s cubic-bezier(0.22,0.61,0.36,1)}
 .ad-slide{flex:0 0 100%;display:block}
 .ad-slide img{width:100%;height:auto;display:block}
@@ -1642,10 +1642,17 @@ function adGo(i) {
   document.querySelectorAll('#adDots .ad-dot').forEach((d, k) => d.classList.toggle('active', k === adIndex));
   adFitHeight();
 }
+const AD_MAX_H = () => window.innerWidth <= 600 ? 220 : window.innerWidth <= 1024 ? 260 : 300;
 function adFitHeight() {
   const slide = document.querySelectorAll('#adTrack .ad-slide')[adIndex];
-  const h = slide ? slide.offsetHeight : 0;
-  if (h) document.getElementById('adSlider').style.height = h + 'px';
+  if (!slide) return;
+  const img = slide.querySelector('img');
+  const w = (img && (img.naturalWidth || +img.getAttribute('width'))) || 0;
+  const h = (img && (img.naturalHeight || +img.getAttribute('height'))) || 0;
+  const slider = document.getElementById('adSlider');
+  // keep the whole banner visible but no taller than AD_MAX_H: make the box narrower instead
+  slider.style.maxWidth = (w && h) ? Math.round(AD_MAX_H() * w / h) + 'px' : '';
+  requestAnimationFrame(() => { const sh = slide.offsetHeight; if (sh) slider.style.height = sh + 'px'; });
 }
 window.addEventListener('resize', adFitHeight);
 function adAuto() {
