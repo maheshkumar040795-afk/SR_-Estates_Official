@@ -23,6 +23,7 @@
   if (page === 'details.php' && id && /^\d+$/.test(id)) to = base + '?property=' + id;
   else if (page === 'about.php') to = base + 'about.html';
   else if (page === 'contact.php') to = base + 'contact.html';
+  else if (page === 'terms.php') to = base + 'terms.html';
   location.replace(to);
 })();
 </script>
