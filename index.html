@@ -74,7 +74,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--smoke);color:var(--text);
 }
 .cinematic-hero{position:relative;min-height:100vh;width:100%;overflow:hidden;background:#174A8B}
 .hero-video-layer{position:absolute;inset:0 0 0 0;z-index:0;overflow:hidden;-webkit-transform:translateZ(0);transform:translateZ(0)}
-.hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0;transform:scale(1.35);transform-origin:center}
+.hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0}
 .hero-video-layer video{width:100%;height:100%;object-fit:cover;display:block;-webkit-transform:translateZ(0);transform:translateZ(0)}
 .hero-video-grad{position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(14,47,87,0.72) 0%,rgba(14,47,87,0.40) 38%,rgba(14,47,87,0.32) 68%,#F5F7FB 100%);pointer-events:none}
 
@@ -753,7 +753,11 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem}
 
   <!-- Hero background video -->
   <div class="hero-video-layer">
-    <img class="hero-bg-video" id="heroBgImg" alt="" style="opacity:0;transition:opacity 1s ease" onload="this.style.opacity=1">
+    <video class="hero-bg-video" id="heroBgVideo" autoplay muted loop playsinline preload="auto" aria-hidden="true"
+           poster="https://res.cloudinary.com/vofzzvhe/video/upload/so_0,f_jpg,q_auto,w_1600/v1793122077/Create_real_estate_video_20261027225727.jpg">
+      <source src="https://res.cloudinary.com/vofzzvhe/video/upload/q_auto,vc_auto,w_1920,c_limit/v1793122077/Create_real_estate_video_20261027225727.mp4" type="video/mp4">
+      <source src="https://res.cloudinary.com/vofzzvhe/video/upload/v1793122077/Create_real_estate_video_20261027225727.mp4" type="video/mp4">
+    </video>
     <div class="hero-video-grad"></div>
   </div>
 
@@ -1207,7 +1211,6 @@ function loadListings() {
     listings = snapshot.docs.map(d => srNormalize(d.id, d.data())).sort((a, b) => b._sort - a._sort);
     applyFilters();
     updateStats();
-    setHeroImage();
     checkUrlParam();
   };
 
@@ -1227,14 +1230,15 @@ function loadListings() {
   });
 }
 
-let heroSet = false;
-function setHeroImage() {
-  if (heroSet) return;
-  const withImg = listings.find(l => !l.sold && l.images.length);
-  if (!withImg) return;
-  heroSet = true;
-  document.getElementById('heroBgImg').src = srImg(withImg.images[0], 1920);
-}
+// Hero background video: make sure it starts on phones that block autoplay until interaction
+(() => {
+  const v = document.getElementById('heroBgVideo');
+  if (!v) return;
+  v.muted = true;
+  const play = () => { const p = v.play(); if (p && p.catch) p.catch(() => {}); };
+  play();
+  ['touchstart', 'click', 'scroll'].forEach(ev => window.addEventListener(ev, play, { once: true, passive: true }));
+})();
 
 function updateStats() {
   const active = listings.filter(l => !l.sold);
