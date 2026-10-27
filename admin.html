@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SR Estates — Admin Portal</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --indigo:#0A0A0A;--indigo-mid:#1A1610;--indigo-light:#C9A227;
+  --gold:#DCAE4E;--saffron:#FF6B2B;--teal:#0D9488;--red:#DC2626;--green:#16A34A;
+  --white:#FFFFFF;--bg:#0A0A0A;--panel:#1A1610;--panel2:#221C0F;
+  --border:#3A2F1A;--border-light:#2E2510;--text-main:#F3E4C8;--text-muted:#8A7A52;
+  --gold-glow:0 0 20px rgba(220,174,78,0.25);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-main);min-height:100vh}
+/* ── NUMERIC / ALPHANUMERIC FONT ── */
+:root{ --font-mono:'JetBrains Mono',monospace; }
+.mono,.price-text,.stat-card-body .val,.si-val,
+.table-prop-id,code{font-family:var(--font-mono)!important;letter-spacing:0.02em}
+#loginScreen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 30% 20%,rgba(201,162,39,0.15),transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(220,174,78,0.08),transparent 50%),var(--bg)}
+.login-card{background:var(--panel);border:1px solid var(--border);border-radius:24px;padding:2.5rem 2rem;width:100%;max-width:420px;box-shadow:0 30px 80px rgba(0,0,0,0.5);animation:fadeUp 0.5s ease}
+@keyframes fadeUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.login-logo{display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;justify-content:center}
+.login-badge{width:64px;height:64px;border-radius:14px;background:radial-gradient(circle at 35% 30%,rgba(243,228,200,0.18),rgba(11,21,51,0.4));display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,0.45),0 0 0 2.5px var(--gold),0 0 0 3.75px rgba(11,21,51,0.6)}
+.login-badge img{width:100%;height:100%;object-fit:contain;object-position:center;border-radius:10px}
+.login-title-block h2{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--white)}
+.login-title-block p{font-size:0.8rem;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase}
+.login-subtitle{text-align:center;font-size:0.9rem;color:var(--text-muted);margin-bottom:2rem}
+.lf-label{font-size:0.8rem;font-weight:600;color:var(--text-muted);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:0.4rem}
+.lf-input{width:100%;padding:0.8rem 1rem;background:var(--panel2);border:2px solid var(--border);border-radius:10px;color:var(--text-main);font-size:0.95rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;margin-bottom:1.2rem}
+.lf-input:focus{border-color:var(--gold)}
+.lf-input::placeholder{color:var(--text-muted)}
+.btn-login{width:100%;padding:0.85rem;background:linear-gradient(135deg,var(--gold),#C9973D);color:var(--indigo);border:none;border-radius:12px;font-weight:700;font-size:1rem;cursor:pointer;transition:all 0.3s;margin-top:0.5rem;font-family:'DM Sans',sans-serif}
+.btn-login:hover{transform:translateY(-2px);box-shadow:var(--gold-glow)}
+.login-hint{text-align:center;font-size:0.78rem;color:var(--text-muted);margin-top:1rem}
+.login-err{color:#F87171;font-size:0.82rem;text-align:center;margin-bottom:0.75rem;display:none;align-items:center;gap:0.4rem;justify-content:center}
+.login-back{display:flex;align-items:center;gap:0.4rem;color:var(--text-muted);font-size:0.82rem;text-decoration:none;margin-top:1.5rem;justify-content:center;transition:color 0.2s}
+.login-back:hover{color:var(--gold)}
+#adminApp{display:none}
+.admin-header{background:var(--panel);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.admin-logo{display:flex;align-items:center;gap:0.75rem}
+.admin-badge{width:44px;height:44px;border-radius:10px;background:radial-gradient(circle at 35% 30%,rgba(243,228,200,0.18),rgba(11,21,51,0.4));display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,0.4),0 0 0 2px var(--gold),0 0 0 3px rgba(11,21,51,0.6)}
+.admin-badge img{width:100%;height:100%;object-fit:contain;object-position:center;border-radius:8px}
+.admin-logo-text h1{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--white)}
+.admin-logo-text p{font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
+.admin-header-right{display:flex;align-items:center;gap:1rem}
+.admin-pill{background:linear-gradient(135deg,rgba(220,174,78,0.15),rgba(220,174,78,0.05));border:1px solid rgba(220,174,78,0.25);color:var(--gold);padding:0.4rem 1rem;border-radius:20px;font-size:0.82rem;font-weight:600;display:flex;align-items:center;gap:0.4rem}
+.btn-icon{background:var(--panel2);border:1px solid var(--border);color:var(--text-muted);width:38px;height:38px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-size:0.9rem;text-decoration:none}
+.btn-icon:hover{background:var(--border-light);color:var(--text-main)}
+.btn-logout{background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.3);color:#F87171;font-size:0.82rem;padding:0.4rem 0.85rem;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:0.4rem;transition:all 0.2s}
+.btn-logout:hover{background:rgba(220,38,38,0.2)}
+.admin-tabs{background:var(--panel);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;gap:0}
+.tab-btn{padding:1rem 1.25rem;font-size:0.88rem;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text-muted);border-bottom:3px solid transparent;transition:all 0.2s;display:flex;align-items:center;gap:0.5rem}
+.tab-btn:hover{color:var(--text-main)}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;padding:1.5rem 2rem}
+.stat-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem;transition:border-color 0.2s}
+.stat-card:hover{border-color:var(--border-light)}
+.stat-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0}
+.stat-icon.s1{background:rgba(220,174,78,0.12);color:var(--gold)}.stat-icon.s2{background:rgba(13,148,136,0.12);color:var(--teal)}.stat-icon.s3{background:rgba(255,107,43,0.12);color:var(--saffron)}.stat-icon.s4{background:rgba(201,162,39,0.12);color:var(--indigo-light)}
+.stat-card-body .val{font-family:'JetBrains Mono',monospace;font-size:1.6rem;font-weight:700;color:var(--white);letter-spacing:0.02em}
+.stat-card-body .lbl{font-size:0.78rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px}
+.tab-content{padding:0 2rem 2rem;display:none}
+.tab-content.active{display:block}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:1rem}
+.section-title{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--white)}
+.btn-add{background:linear-gradient(135deg,var(--saffron),#FF8C5A);color:white;border:none;padding:0.6rem 1.25rem;border-radius:10px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;transition:all 0.3s}
+.btn-add:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,107,43,0.35)}
+.admin-search-bar{display:flex;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.admin-search-input{flex:1;min-width:200px;padding:0.65rem 1rem;background:var(--panel);border:1px solid var(--border);border-radius:10px;color:var(--text-main);font-size:0.9rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s}
+.admin-search-input:focus{border-color:var(--gold)}
+.admin-search-input::placeholder{color:var(--text-muted)}
+.admin-table-wrap{background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:auto}
+.admin-table{width:100%;border-collapse:collapse;min-width:800px}
+.admin-table th{padding:0.9rem 1.25rem;text-align:left;font-size:0.78rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--border);background:var(--panel2)}
+.admin-table td{padding:0.85rem 1.25rem;border-bottom:1px solid var(--border);font-size:0.88rem;color:var(--text-main);vertical-align:middle}
+.admin-table tr:last-child td{border-bottom:none}
+.admin-table tr:hover td{background:rgba(255,255,255,0.02)}
+.table-img{width:52px;height:38px;object-fit:cover;border-radius:6px;background:var(--panel2)}
+.type-badge{padding:0.25rem 0.65rem;border-radius:6px;font-size:0.75rem;font-weight:600;background:rgba(201,162,39,0.15);color:var(--indigo-light)}
+.price-text{color:var(--gold);font-weight:700;font-family:'JetBrains Mono',monospace;font-size:0.85rem;letter-spacing:0.02em}
+.tbl-actions{display:flex;gap:0.4rem}
+.btn-tbl-edit{background:rgba(13,148,136,0.12);color:var(--teal);border:1px solid rgba(13,148,136,0.25);padding:0.35rem 0.75rem;border-radius:7px;cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s}
+.btn-tbl-edit:hover{background:rgba(13,148,136,0.25)}
+.btn-tbl-del{background:rgba(220,38,38,0.1);color:#F87171;border:1px solid rgba(220,38,38,0.25);padding:0.35rem 0.75rem;border-radius:7px;cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s}
+.btn-tbl-del:hover{background:rgba(220,38,38,0.25)}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:5000;justify-content:center;align-items:flex-start;padding:2rem 1rem;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--panel);border:1px solid var(--border);border-radius:20px;width:100%;max-width:680px;margin:auto;animation:modalIn 0.3s ease}
+@keyframes modalIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:1.5rem;border-bottom:1px solid var(--border)}
+.modal-hdr-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--white)}
+.modal-close{background:var(--panel2);border:1px solid var(--border);color:var(--text-muted);width:34px;height:34px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all 0.2s}
+.modal-close:hover{color:var(--text-main)}
+.modal-bd{padding:1.5rem}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.fg-full{grid-column:1/-1}
+.f-label{font-size:0.78rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.35rem}
+.f-input{width:100%;padding:0.65rem 0.9rem;background:var(--panel2);border:2px solid var(--border);border-radius:10px;color:var(--text-main);font-size:0.9rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s}
+.f-input:focus{border-color:var(--gold)}
+.f-input::placeholder{color:var(--text-muted)}
+/* UPLOAD ZONE */
+.upload-zone{border:2px dashed var(--border-light);border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--panel2);position:relative}
+.upload-zone:hover{border-color:var(--gold);background:rgba(220,174,78,0.04)}
+.upload-zone.has-img{border-style:solid;border-color:var(--teal)}
+.upload-zone.uploading{border-color:var(--saffron);pointer-events:none}
+.upload-icon{font-size:2rem;color:var(--text-muted);margin-bottom:0.5rem}
+.upload-zone p{color:var(--text-muted);font-size:0.9rem}
+.upload-zone small{color:var(--text-muted);font-size:0.78rem}
+/* UPLOAD PROGRESS */
+.upload-progress-wrap{margin-top:0.75rem;display:none}
+.upload-progress-wrap.show{display:block}
+.upload-progress-bar-bg{background:var(--border);border-radius:4px;height:6px;overflow:hidden;margin-bottom:0.4rem}
+.upload-progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--saffron),var(--gold));border-radius:4px;width:0%;transition:width 0.3s}
+/* DOCUMENT UPLOAD ZONE */
+.doc-zone{border:2px dashed var(--border-light);border-radius:12px;padding:1.25rem;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--panel2);margin-top:1rem}
+.doc-zone:hover{border-color:var(--teal);background:rgba(13,148,136,0.05)}
+.doc-zone.has-doc{border-style:solid;border-color:var(--teal)}
+.doc-zone.uploading{border-color:var(--saffron);pointer-events:none}
+.doc-icon{font-size:1.6rem;color:var(--text-muted);margin-bottom:0.4rem}
+.doc-zone p{color:var(--text-muted);font-size:0.9rem}
+.doc-zone small{color:var(--text-muted);font-size:0.78rem}
+.doc-list{display:flex;flex-direction:column;gap:0.5rem;margin-top:0.9rem;text-align:left}
+.doc-chip{display:flex;align-items:center;gap:0.7rem;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:0.55rem 0.8rem}
+.doc-chip i.doc-type-icon{font-size:1.1rem;width:22px;text-align:center}
+.doc-chip i.fa-file-pdf{color:#F87171}
+.doc-chip i.fa-file-word{color:#D4AF37}
+.doc-chip-name{flex:1;font-size:0.84rem;color:var(--text-main);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.doc-chip-size{font-size:0.72rem;color:var(--text-muted);flex-shrink:0}
+.doc-chip-rem{background:rgba(220,38,38,0.1);color:#F87171;border:1px solid rgba(220,38,38,0.25);width:26px;height:26px;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.78rem}
+.doc-chip-rem:hover{background:rgba(220,38,38,0.25)}
+.upload-progress-label{font-size:0.78rem;color:var(--text-muted);display:flex;justify-content:space-between}
+/* IMAGE PREVIEWS */
+.preview-row{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.75rem}
+.prev-item{position:relative;width:80px;height:60px;border-radius:8px;overflow:hidden;background:var(--panel2);border:1px solid var(--border)}
+.prev-item img{width:100%;height:100%;object-fit:cover}
+.prev-item .prev-rem{position:absolute;top:3px;right:3px;background:rgba(220,38,38,0.9);color:white;border:none;width:20px;height:20px;border-radius:50%;cursor:pointer;font-size:0.7rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.prev-item .prev-rem:hover{background:var(--red)}
+.prev-item .prev-uploading{position:absolute;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:white}
+.prev-item .prev-done{position:absolute;bottom:3px;right:3px;background:var(--green);color:white;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:0.65rem}
+/* MODAL FOOTER */
+.modal-ftr{display:flex;gap:0.75rem;justify-content:flex-end;padding:1.25rem 1.5rem;border-top:1px solid var(--border)}
+.btn-cancel{background:var(--panel2);border:1px solid var(--border);color:var(--text-muted);padding:0.65rem 1.25rem;border-radius:10px;cursor:pointer;font-size:0.9rem;font-weight:600;transition:all 0.2s}
+.btn-cancel:hover{color:var(--text-main)}
+.btn-save{background:linear-gradient(135deg,var(--gold),#C9973D);color:var(--indigo);border:none;padding:0.65rem 1.5rem;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.9rem;transition:all 0.3s;display:flex;align-items:center;gap:0.5rem}
+.btn-save:hover{transform:translateY(-2px);box-shadow:var(--gold-glow)}
+.btn-save:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+/* PORTAL CARD */
+.customer-portal-card{background:linear-gradient(135deg,var(--indigo-light),var(--indigo-mid));border-radius:16px;padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem}
+.cp-card-left h3{font-family:'Playfair Display',serif;font-size:1.15rem;color:white;margin-bottom:0.3rem}
+.cp-card-left p{color:rgba(255,255,255,0.65);font-size:0.88rem}
+.btn-view-portal{background:white;color:var(--indigo-mid);border:none;padding:0.65rem 1.5rem;border-radius:10px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;transition:all 0.2s;text-decoration:none}
+.btn-view-portal:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.2)}
+/* DASHBOARD CARDS */
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem}
+.dash-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:1.5rem}
+.dash-card-title{font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:1rem}
+/* STORAGE INFO */
+.storage-card{background:linear-gradient(135deg,rgba(13,148,136,0.1),rgba(13,148,136,0.05));border:1px solid rgba(13,148,136,0.25);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+.storage-card h3{color:var(--teal);font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem}
+.storage-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem}
+.si-item{text-align:center}
+.si-val{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--white);letter-spacing:0.02em}
+.si-lbl{font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px}
+/* EMPTY */
+.empty-table{text-align:center;padding:4rem 2rem;color:var(--text-muted)}
+.empty-table i{font-size:3.5rem;color:var(--border-light);margin-bottom:1rem;display:block}
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;padding:0.85rem 1.5rem;border-radius:12px;display:none;align-items:center;gap:0.75rem;z-index:9999;font-size:0.9rem;animation:toastIn 0.3s ease;box-shadow:0 8px 30px rgba(0,0,0,0.4)}
+.toast.show{display:flex}.toast.success{background:var(--teal);color:white}.toast.error{background:var(--red);color:white}.toast.info{background:var(--indigo-mid);color:white}.toast.warning{background:#D97706;color:white}
+@keyframes toastIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+/* DB STATUS */
+.db-status{display:inline-flex;align-items:center;gap:0.4rem;padding:0.3rem 0.75rem;border-radius:20px;font-size:0.75rem;font-weight:600}
+.db-status.connected{background:rgba(22,163,74,0.15);border:1px solid rgba(22,163,74,0.3);color:#86EFAC}
+.db-status.connecting{background:rgba(220,174,78,0.12);border:1px solid rgba(220,174,78,0.3);color:var(--gold)}
+.db-status.error{background:rgba(220,38,38,0.12);border:1px solid rgba(220,38,38,0.3);color:#F87171}
+.db-dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+/* STATUS CHECKBOXES */
+.status-checks{display:flex;flex-direction:column;gap:0.45rem}
+.status-cb-label{display:inline-flex;align-items:center;gap:0.45rem;cursor:pointer;user-select:none;font-size:0.78rem;font-weight:600;white-space:nowrap}
+.status-cb-label input[type=checkbox]{width:15px;height:15px;cursor:pointer;flex-shrink:0;accent-color:#EA580C}
+.status-cb-label.cb-sold input[type=checkbox]{accent-color:#DC2626}
+.cb-pill{padding:0.15rem 0.55rem;border-radius:20px;font-size:0.7rem;font-weight:700;letter-spacing:0.3px}
+.cb-pill.adv{background:rgba(234,88,12,0.12);color:#EA580C;border:1px solid rgba(234,88,12,0.3)}
+.cb-pill.sold{background:rgba(220,38,38,0.12);color:#F87171;border:1px solid rgba(220,38,38,0.25)}
+.cb-pill.adv.checked{background:rgba(234,88,12,0.3);color:#FDBA74;border-color:#EA580C}
+.cb-pill.sold.checked{background:rgba(220,38,38,0.3);color:#FCA5A5;border-color:#DC2626}
+tr.row-sold td{opacity:0.6}
+tr.row-sold td:first-child::after{content:'SOLD';position:absolute;top:4px;left:4px;background:#DC2626;color:white;font-size:0.6rem;font-weight:700;padding:0.1rem 0.35rem;border-radius:4px;letter-spacing:0.5px}
+tr.row-sold td:first-child{position:relative}
+@media(max-width:768px){.stats-row{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.admin-tabs{overflow-x:auto}.admin-header{flex-direction:column;gap:0.75rem}.stats-row,.tab-content{padding:1rem}}
+/* STAFF CONFIG */
+.staff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;margin-top:1rem}
+.staff-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:1.4rem 1.5rem;display:flex;align-items:center;gap:1rem;transition:border-color 0.2s,transform 0.2s;position:relative}
+.staff-card:hover{border-color:var(--border-light);transform:translateY(-2px)}
+.staff-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--indigo-light),var(--indigo-mid));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:white;flex-shrink:0}
+.staff-info{flex:1;min-width:0}
+.staff-name{font-weight:700;font-size:0.98rem;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.staff-num{color:var(--text-muted);font-size:0.82rem;margin-top:0.2rem;display:flex;align-items:center;gap:0.35rem;font-family:'JetBrains Mono',monospace;letter-spacing:0.02em}
+.staff-actions{display:flex;gap:0.4rem;flex-shrink:0}
+.staff-empty{text-align:center;padding:4rem 2rem;color:var(--text-muted);grid-column:1/-1}
+.staff-empty i{font-size:3.5rem;color:var(--border-light);margin-bottom:1rem;display:block}
+.btn-staff-add{background:linear-gradient(135deg,var(--indigo-light),var(--indigo-mid));color:white;border:none;padding:0.6rem 1.25rem;border-radius:10px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;transition:all 0.3s}
+.btn-staff-add:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(201,162,39,0.35)}
+.staff-modal-box{max-width:420px}
+.staff-count-badge{background:rgba(201,162,39,0.15);border:1px solid rgba(201,162,39,0.3);color:var(--indigo-light);padding:0.3rem 0.75rem;border-radius:20px;font-size:0.78rem;font-weight:600}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ FIREBASE CONFIG ═══════════════ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot, query, orderBy,
+         doc, setDoc, deleteDoc, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged,
+         setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+// SR Estates Firebase project config
+const firebaseConfig = {
+  apiKey: "AIzaSyDwnvSsEDeSHnAET7pxTap6LhvVhJod7KY",
+  authDomain: "sr-estates.firebaseapp.com",
+  projectId: "sr-estates",
+  storageBucket: "sr-estates.firebasestorage.app",
+  messagingSenderId: "921931819810",
+  appId: "1:921931819810:web:2672e0db4f60a7904c137b"
+};
+/* ── SR ESTATES: one listing shape for migrated + admin-added docs ── */
+const SR_TYPES = ['Plots','Individual House','Apartments','Commercial Property'];
+function srMapType(cat, title){
+  const t = ((cat||'') + ' ' + (title||'')).toLowerCase();
+  const c = (cat||'').toLowerCase();
+  const pick = s => {
+    if (/commercial|shop|office|showroom|godown|warehouse|space/.test(s)) return 'Commercial Property';
+    if (/apartment|flat|bhk/.test(s)) return 'Apartments';
+    if (/house|villa|individual|independent/.test(s)) return 'Individual House';
+    if (/plot|land|ground|site/.test(s)) return 'Plots';
+    return '';
+  };
+  return pick(c) || pick(t) || 'Plots';
+}
+function srNormalize(fsId, d){
+  d = d || {};
+  const images = (d.images||[]).map(x => typeof x === 'string' ? x : (x && x.url)).filter(Boolean);
+  const type = SR_TYPES.includes(d.type) ? d.type : srMapType(d.category || d.type, d.title);
+  const listingType = d.listingType || (/rent|lease/i.test(d.typeText||'') ? 'rent' : 'sale');
+  const price = Number(d.price) > 0 ? Number(d.price) : 0;
+  let priceUnit = d.priceUnit;
+  if (!priceUnit) {
+    if (!price) priceUnit = 'request';
+    else if (listingType === 'rent') priceUnit = 'month';
+    else if (type === 'Plots' && price < 100000) priceUnit = 'sqft';
+    else priceUnit = 'auto';
+  }
+  const added = d.dateAdded ? (d.dateAdded.toDate ? d.dateAdded.toDate() : new Date(d.dateAdded)) : null;
+  const numId = parseInt(d.oldId || fsId, 10) || 0;
+  return {
+    ...d,
+    firestoreId: fsId,
+    id: d.customId || ('SR' + (d.oldId || fsId)),
+    customId: d.customId || ('SR' + (d.oldId || fsId)),
+    type, listingType, price, priceUnit,
+    title: d.title || '',
+    location: d.location != null ? d.location : (d.address || ''),
+    city: d.city || '',
+    size: d.size != null ? d.size : (d.areaText || ''),
+    details: d.details != null ? d.details : (d.description || ''),
+    videoUrl: d.videoUrl || '',
+    images,
+    sold: !!d.sold,
+    _added: added,
+    _sort: added ? added.getTime() : numId
+  };
+}
+function srFormatPrice(l){
+  const n = Number(l.price) || 0;
+  const inr = v => Number(v).toLocaleString('en-IN');
+  switch (l.priceUnit) {
+    case 'request': return 'Price on Request';
+    case 'month':   return n ? `₹${inr(n)} / month` : 'Rent on Request';
+    case 'sqft':    return `₹${inr(n)} / sq.ft`;
+    case 'L':       return l.priceValue != null ? `₹${l.priceValue} Lakh` : `₹${inr(n)}`;
+    case 'Cr':      return l.priceValue != null ? `₹${l.priceValue} Cr` : `₹${inr(n)}`;
+  }
+  if (!n) return 'Price on Request';
+  if (n >= 10000000) return `₹${+(n/10000000).toFixed(2)} Cr`;
+  if (n >= 100000)   return `₹${+(n/100000).toFixed(2)} Lakh`;
+  return `₹${inr(n)}`;
+}
+/* Cloudinary on-the-fly resize: f_auto,q_auto,w_<px> */
+function srImg(url, w){
+  if (!url || url.indexOf('res.cloudinary.com') === -1 || url.indexOf('/upload/') === -1) return url;
+  return url.replace('/upload/', `/upload/f_auto,q_auto,c_limit,w_${w}/`);
+}
+function srYoutubeId(url){
+  if (!url) return '';
+  const m = String(url).match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/|v\/))([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : '';
+}
+
+window.srNormalize = srNormalize; window.srFormatPrice = srFormatPrice; window.srImg = srImg; window.srYoutubeId = srYoutubeId;
+
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
+setPersistence(auth, browserLocalPersistence).catch(() => {});
+window._db = db;
+window._auth = auth;
+window._signIn = (email, pwd) => signInWithEmailAndPassword(auth, email, pwd);
+window._signOut = () => signOut(auth);
+window._fsLib = { collection, onSnapshot, query, orderBy, doc, setDoc, deleteDoc, serverTimestamp, updateDoc };
+
+// Show the dashboard only when a Firebase user is signed in (stays signed in on this device)
+onAuthStateChanged(auth, user => {
+  document.getElementById('loginScreen').style.display = user ? 'none' : 'flex';
+  document.getElementById('adminApp').style.display = user ? 'block' : 'none';
+  const who = document.getElementById('adminWho');
+  if (who) who.textContent = user ? user.email : '';
+});
+
+// Real-time listener — all properties (migrated + new)
+onSnapshot(collection(db, 'properties'), snap => {
+  window._listings = snap.docs.map(d => srNormalize(d.id, d.data())).sort((a, b) => b._sort - a._sort);
+  updateStats();
+  renderTable();
+  renderDashboard();
+  document.getElementById('dbBadge').className = 'db-status connected';
+  document.getElementById('dbBadge').innerHTML = '<span class="db-dot"></span> Live ✓';
+}, err => {
+  console.error(err);
+  document.getElementById('dbBadge').className = 'db-status error';
+  document.getElementById('dbBadge').innerHTML = '<span class="db-dot"></span> DB Error';
+});
+
+// Real-time listener — staff collection
+const staffQ = query(collection(db, 'staff'), orderBy('createdAt', 'asc'));
+onSnapshot(staffQ, snap => {
+  window._staff = snap.docs.map(d => ({ firestoreId: d.id, ...d.data() }));
+  renderStaffGrid();
+}, err => console.error('Staff listener error:', err));
+</script>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-badge"><img src="logo.png" alt="SR Estates"></div>
+      <div class="login-title-block"><h2>SR Estates</h2><p>Admin Portal</p></div>
+    </div>
+    <p class="login-subtitle">Sign in to manage property listings</p>
+    <div class="login-err" id="loginErr"><i class="fas fa-exclamation-circle"></i> <span id="loginErrMsg">Invalid email or password. Try again.</span></div>
+    <div class="lf-label">Email</div>
+    <input type="email" class="lf-input" id="emailInput" placeholder="admin email" autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('pwdInput').focus()" style="margin-bottom:1rem">
+    <div class="lf-label">Password</div>
+    <input type="password" class="lf-input" id="pwdInput" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-login" id="loginBtn" onclick="doLogin()"><i class="fas fa-unlock"></i> Sign In</button>
+    <a href="index.html" class="login-back"><i class="fas fa-arrow-left"></i> Back to Customer Portal</a>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="adminApp">
+  <header class="admin-header">
+    <div class="admin-logo">
+      <div class="admin-badge"><img src="logo.png" alt="SR Estates"></div>
+      <div class="admin-logo-text"><h1>SR Estates</h1><p>Admin Dashboard</p></div>
+    </div>
+    <div class="admin-header-right">
+      <div class="admin-pill"><i class="fas fa-shield-alt"></i> <span id="adminWho">SR Estates</span></div>
+      <div class="db-status connecting" id="dbBadge"><span class="db-dot"></span> Connecting…</div>
+      <a href="index.html" target="_blank" class="btn-icon" title="View Customer Portal"><i class="fas fa-external-link-alt"></i></a>
+      <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </header>
+
+  <div class="admin-tabs">
+    <button class="tab-btn" onclick="switchTab('dashboard',this)"><i class="fas fa-chart-bar"></i> Dashboard</button>
+    <button class="tab-btn active" onclick="switchTab('listings',this)"><i class="fas fa-list"></i> Listings</button>
+    <button class="tab-btn" onclick="switchTab('staff',this)"><i class="fas fa-users-cog"></i> Staff Config</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-icon s1"><i class="fas fa-building"></i></div><div class="stat-card-body"><div class="val" id="s1">—</div><div class="lbl">Total Listings</div></div></div>
+    <div class="stat-card"><div class="stat-icon s2"><i class="fas fa-map"></i></div><div class="stat-card-body"><div class="val" id="s2">—</div><div class="lbl">Plots</div></div></div>
+    <div class="stat-card"><div class="stat-icon s3"><i class="fas fa-home"></i></div><div class="stat-card-body"><div class="val" id="s3">—</div><div class="lbl">Houses &amp; Flats</div></div></div>
+    <div class="stat-card"><div class="stat-icon s4"><i class="fas fa-calendar-plus"></i></div><div class="stat-card-body"><div class="val" id="s4">—</div><div class="lbl">For Rent</div></div></div>
+  </div>
+
+  <!-- DASHBOARD TAB -->
+  <div class="tab-content" id="tab-dashboard">
+    <div class="customer-portal-card">
+      <div class="cp-card-left"><h3><i class="fas fa-users"></i> Customer Portal</h3><p>Live listings visible to all customers. Photos are stored in Cloudinary.</p></div>
+      <a href="index.html" target="_blank" class="btn-view-portal"><i class="fas fa-eye"></i> View Portal</a>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-card"><div class="dash-card-title">Listings by Type</div><div id="typeBreakdown"></div></div>
+      <div class="dash-card"><div class="dash-card-title">Recent Activity</div><div id="recentActivity"></div></div>
+    </div>
+  </div>
+
+  <!-- LISTINGS TAB -->
+  <div class="tab-content active" id="tab-listings">
+    <div class="section-header">
+      <h2 class="section-title"><i class="fas fa-list" style="color:var(--gold);margin-right:0.5rem"></i>Manage Listings</h2>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+        <button class="btn-add" style="background:linear-gradient(135deg,#16A34A,#15803D)" onclick="exportToExcel()"><i class="fas fa-file-excel"></i> Export Excel</button>
+        <button class="btn-add" onclick="openAddModal()"><i class="fas fa-plus"></i> Add New Listing</button>
+      </div>
+    </div>
+    <div class="admin-search-bar">
+      <input type="text" class="admin-search-input" id="adminSearch" placeholder="Search by ID, title, location…" oninput="renderTable()">
+      <select class="admin-search-input" style="max-width:180px" id="adminTypeFilter" onchange="renderTable()">
+        <option value="">All Types</option>
+        <option>Plots</option><option>Individual House</option><option>Apartments</option><option>Commercial Property</option>
+      </select>
+      <select class="admin-search-input" style="max-width:150px" id="adminStatusFilter" onchange="renderTable()">
+        <option value="">All Status</option><option value="active">Active</option><option value="sold">Sold</option>
+        <option value="sale">For Sale</option><option value="rent">For Rent</option>
+      </select>
+    </div>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>Photo</th><th>ID</th><th>Title</th><th>Type</th><th>Location</th><th>Size</th><th>Price</th><th>Photos</th><th>Added</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="adminTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- STAFF CONFIG TAB -->
+  <div class="tab-content" id="tab-staff">
+    <div class="section-header">
+      <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
+        <h2 class="section-title"><i class="fas fa-users-cog" style="color:var(--gold);margin-right:0.5rem"></i>Staff Config</h2>
+        <span class="staff-count-badge" id="staffCountBadge"><i class="fas fa-user"></i> 0 Staff</span>
+      </div>
+      <button class="btn-staff-add" onclick="openStaffModal()"><i class="fas fa-user-plus"></i> Add New Staff</button>
+    </div>
+    <div class="staff-grid" id="staffGrid">
+      <div class="staff-empty" id="staffEmpty">
+        <i class="fas fa-users-slash"></i>
+        <p>No staff added yet. Click <strong>Add New Staff</strong> to get started.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- STAFF MODAL -->
+<div class="modal-overlay" id="staffModal" onclick="closeStaffModalOnOverlay(event)">
+  <div class="modal-box staff-modal-box">
+    <div class="modal-hdr">
+      <div class="modal-hdr-title" id="staffModalTitle"><i class="fas fa-user-plus" style="color:var(--indigo-light);margin-right:0.5rem"></i>Add New Staff</div>
+      <button class="modal-close" onclick="closeStaffModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-bd">
+      <div style="margin-bottom:1rem">
+        <div class="f-label">Staff Name <span style="color:var(--saffron)">*</span></div>
+        <input type="text" class="f-input" id="sName" placeholder="e.g. Ravi Kumar" oninput="updateStaffPreview()">
+      </div>
+      <div>
+        <div class="f-label">Staff Mobile Number <span style="color:var(--saffron)">*</span></div>
+        <input type="tel" class="f-input" id="sNumber" placeholder="e.g. 9876543210" maxlength="15" oninput="updateStaffPreview()">
+      </div>
+      <!-- Live preview card -->
+      <div id="staffPreview" style="display:none;margin-top:1.25rem;background:var(--panel2);border:1px solid var(--border-light);border-radius:14px;padding:1rem 1.25rem;display:none;align-items:center;gap:0.9rem">
+        <div class="staff-avatar" id="prevAvatar">?</div>
+        <div>
+          <div class="staff-name" id="prevName">—</div>
+          <div class="staff-num"><i class="fas fa-phone"></i> <span id="prevNum">—</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ftr">
+      <button class="btn-cancel" onclick="closeStaffModal()">Cancel</button>
+      <button class="btn-save" id="staffSaveBtn" onclick="saveStaff()"><i class="fas fa-save"></i> Save Staff</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div class="modal-overlay" id="editModal" onclick="closeModalOnOverlay(event)">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <div class="modal-hdr-title" id="modalHdrTitle"><i class="fas fa-plus-circle" style="color:var(--saffron);margin-right:0.5rem"></i>Add New Listing</div>
+      <button class="modal-close" onclick="closeEditModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-bd">
+
+      <!-- PHOTO UPLOAD ZONE -->
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('imgFileInput').click()">
+        <div class="upload-icon">📸</div>
+        <p><strong>Click to upload property photos</strong></p>
+        <small>JPG, PNG, WEBP • Max 15 photos • Uploaded to Cloudinary instantly</small>
+        <input type="file" id="imgFileInput" multiple accept="image/jpeg,image/png,image/webp" style="display:none" onchange="handleImgs(event)">
+        <div class="preview-row" id="imgPreviewRow"></div>
+      </div>
+
+      <!-- UPLOAD PROGRESS -->
+      <div class="upload-progress-wrap" id="uploadProgressWrap">
+        <div class="upload-progress-bar-bg"><div class="upload-progress-bar-fill" id="uploadBar"></div></div>
+        <div class="upload-progress-label"><span id="uploadStatusText">Uploading photos…</span><span id="uploadPct">0%</span></div>
+      </div>
+
+      <!-- DOCUMENT UPLOAD ZONE -->
+      <div class="doc-zone" id="docZone" onclick="document.getElementById('docFileInput').click()">
+        <div class="doc-icon"><i class="fas fa-file-arrow-up"></i></div>
+        <p><strong>Click to upload documents (PDF / Word)</strong></p>
+        <small>Patta, sale deed, EC, brochure etc. • Max 5 files • Up to 10MB each • Uploaded to Cloudinary</small>
+        <input type="file" id="docFileInput" multiple accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none" onchange="handleDocs(event)">
+        <div class="doc-list" id="docListRow"></div>
+      </div>
+
+      <!-- DOCUMENT UPLOAD PROGRESS -->
+      <div class="upload-progress-wrap" id="docUploadProgressWrap">
+        <div class="upload-progress-bar-bg"><div class="upload-progress-bar-fill" id="docUploadBar"></div></div>
+        <div class="upload-progress-label"><span id="docUploadStatusText">Uploading document…</span><span id="docUploadPct">0%</span></div>
+      </div>
+
+      <div class="form-grid" style="margin-top:1.25rem">
+        <div><div class="f-label">Property ID</div><input type="text" class="f-input" id="fId" placeholder="e.g. SR442"></div>
+        <div><div class="f-label">Property Type <span style="color:var(--saffron)">*</span></div>
+          <select class="f-input" id="fType" onchange="toggleTypeFields(this.value)">
+            <option value="">Select Type</option>
+            <option>Plots</option><option>Individual House</option><option>Apartments</option><option>Commercial Property</option>
+          </select>
+        </div>
+        <div><div class="f-label">For Sale / Rent <span style="color:var(--saffron)">*</span></div>
+          <select class="f-input" id="fDeal">
+            <option value="sale">For Sale</option>
+            <option value="rent">For Rent / Lease</option>
+          </select>
+        </div>
+        <div id="floorFieldWrap" style="display:none"><div class="f-label">Floor Number</div><input type="text" class="f-input" id="fFloorNumber" placeholder="e.g. 3rd Floor, Ground Floor"></div>
+        <div id="udsFieldWrap" style="display:none"><div class="f-label">UDS Sq.ft</div><input type="text" class="f-input" id="fUdsSqft" placeholder="e.g. 1200"></div>
+        <div id="landUnitFieldWrap" style="display:none">
+          <div class="f-label">Land Unit</div>
+          <div style="display:flex;gap:0.5rem">
+            <select class="f-input" id="fLandUnit" style="max-width:130px;flex-shrink:0">
+              <option value="Cent">Cent</option>
+              <option value="Acre">Acre</option>
+              <option value="Ground">Ground</option>
+            </select>
+            <input type="text" class="f-input" id="fLandUnitValue" placeholder="e.g. 2.2">
+          </div>
+        </div>
+        <div class="fg-full"><div class="f-label">Title <span style="color:var(--saffron)">*</span></div><input type="text" class="f-input" id="fTitle" placeholder="e.g. Premium 2 BHK Flat for Sale"></div>
+        <div><div class="f-label">Location / Area <span style="color:var(--saffron)">*</span></div><input type="text" class="f-input" id="fLocation" placeholder="Area name, street…"></div>
+        <div><div class="f-label">City / District</div><input type="text" class="f-input" id="fCity" placeholder="e.g. Chennai"></div>
+        <div><div class="f-label">Area Size <span id="fSizeReq" style="color:var(--saffron)">*</span></div><input type="text" class="f-input" id="fSize" placeholder="e.g. 1200 sqft or 1 Ground"></div>
+        <div><div class="f-label">Price <span style="color:var(--saffron)">*</span></div>
+          <div style="display:flex;gap:0.5rem">
+            <select class="f-input" id="fPriceUnit" style="max-width:140px;flex-shrink:0" onchange="togglePriceInput()">
+              <option value="L">Lakh</option>
+              <option value="Cr">Crore</option>
+              <option value="sqft">₹ / sq.ft</option>
+              <option value="month">₹ / month</option>
+              <option value="request">On Request</option>
+            </select>
+            <input type="number" step="0.01" class="f-input" id="fPrice" placeholder="e.g. 85">
+          </div>
+        </div>
+        <div><div class="f-label">Dimensions (L × W)</div><input type="text" class="f-input" id="fDimensions" placeholder="e.g. 40x30"></div>
+        <div><div class="f-label">Facing Direction</div>
+          <select class="f-input" id="fFacing">
+            <option value="">Select</option>
+            <option>North</option><option>South</option><option>East</option><option>West</option>
+            <option>North-East</option><option>North-West</option><option>South-East</option><option>South-West</option>
+          </select>
+        </div>
+        <div><div class="f-label">Owner Name</div><input type="text" class="f-input" id="fOwner" placeholder="e.g. SR Estates"></div>
+        <div><div class="f-label">Contact Number</div><input type="text" class="f-input" id="fContact" placeholder="+91 98414 36766"></div>
+
+        <!-- ADMIN-ONLY: Actual Owner Details — not synced to customer portal -->
+        <div class="fg-full" style="margin-top:0.25rem">
+          <label style="display:inline-flex;align-items:center;gap:0.6rem;cursor:pointer;user-select:none">
+            <input type="checkbox" id="actualOwnerCheck" onchange="toggleActualOwner(this)"
+              style="width:16px;height:16px;accent-color:var(--saffron);cursor:pointer;flex-shrink:0">
+            <span style="font-size:0.82rem;color:var(--text-muted);font-weight:600">
+              <i class="fas fa-user-shield" style="color:var(--saffron);margin-right:0.3rem"></i>
+              Property has a different Actual Owner
+              <span style="background:rgba(255,107,43,0.12);border:1px solid rgba(255,107,43,0.3);color:var(--saffron);font-size:0.7rem;padding:0.1rem 0.45rem;border-radius:4px;margin-left:0.4rem;letter-spacing:0.5px">ADMIN ONLY</span>
+            </span>
+          </label>
+        </div>
+        <div id="actualOwnerFields" style="display:none;grid-column:1/-1;display:none;grid-template-columns:1fr 1fr;gap:1rem;padding:0.75rem;background:rgba(255,107,43,0.06);border:1px solid rgba(255,107,43,0.2);border-radius:10px">
+          <div><div class="f-label" style="color:var(--saffron)">Actual Owner Name</div><input type="text" class="f-input" id="fActualOwnerName" placeholder="Enter actual owner's name"></div>
+          <div><div class="f-label" style="color:var(--saffron)">Actual Owner Contact</div><input type="text" class="f-input" id="fActualOwnerContact" placeholder="Enter contact number" maxlength="15"></div>
+          <div style="grid-column:1/-1">
+            <div class="f-label" style="color:var(--saffron)">
+              <i class="fas fa-sticky-note" style="margin-right:0.3rem"></i>Actual Owner Notes
+              <span style="background:rgba(255,107,43,0.12);border:1px solid rgba(255,107,43,0.3);color:var(--saffron);font-size:0.7rem;padding:0.1rem 0.45rem;border-radius:4px;margin-left:0.4rem;letter-spacing:0.5px">ADMIN ONLY</span>
+            </div>
+            <textarea class="f-input" id="fActualOwnerNotes" rows="3" placeholder="e.g. Disputed land, legal case pending, power of attorney held by son, NRI owner — contact only via agent…" style="resize:vertical;font-size:0.88rem"></textarea>
+          </div>
+        </div>
+
+        <div class="fg-full"><div class="f-label">YouTube Video Link <i class="fab fa-youtube" style="color:#FF0000"></i></div><input type="text" class="f-input" id="fYoutube" placeholder="e.g. https://youtu.be/XXXXXXXXXXX or https://www.youtube.com/watch?v=XXXXXXXXXXX" oninput="previewYoutube()"><div id="ytPreview" style="margin-top:0.5rem"></div></div>
+        <div class="fg-full"><div class="f-label">Instagram Reel Link <i class="fab fa-instagram" style="color:#E1306C"></i></div><input type="text" class="f-input" id="fInstaReel" placeholder="e.g. https://www.instagram.com/reel/XXXXXXXXXXX/"></div>
+        <div class="fg-full">
+          <div class="f-label">Site Location (Google Maps Link) <i class="fas fa-map-marker-alt" style="color:#22C55E"></i></div>
+          <input type="text" class="f-input" id="fSiteLocation" placeholder="e.g. https://maps.app.goo.gl/XXXXXXX or https://goo.gl/maps/XXXXXXX">
+          <label style="display:inline-flex;align-items:center;gap:0.55rem;margin-top:0.55rem;cursor:pointer;user-select:none">
+            <input type="checkbox" id="fShareLocation" style="width:16px;height:16px;accent-color:var(--saffron);cursor:pointer;flex-shrink:0">
+            <span style="font-size:0.82rem;color:var(--text-muted);font-weight:600">
+              <i class="fas fa-share-alt" style="color:var(--saffron);margin-right:0.3rem"></i>
+              Share to customer
+              <span style="font-weight:400;color:var(--text-muted);opacity:0.75"> — if unchecked, location is saved for admin reference only</span>
+            </span>
+          </label>
+        </div>
+        <div class="fg-full"><div class="f-label">Additional Details</div><textarea class="f-input" id="fDetails" rows="4" placeholder="Bedrooms, floor, car parking, road width, approvals, patta details…"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-ftr">
+      <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+      <button class="btn-save" id="saveBtn" onclick="saveListing()"><i class="fas fa-save"></i> Save Listing</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMsg"></span></div>
+
+<script>
+/* ── CLOUDINARY (unsigned upload preset — safe to be public) ── */
+const CLOUD_NAME    = 'vofzzvhe';
+const UPLOAD_PRESET = 'sr_estates_unsigned';
+
+
+window._listings  = [];
+let editingId     = null;
+let editingCustomId = null;
+let currentImages = [];   // Cloudinary URLs (or {uploading:true} placeholders) for new & existing photos
+let currentDocs   = [];   // {name, type, size, url} — Cloudinary-hosted PDFs/Word docs
+
+function formatPriceShort(l){ return window.srFormatPrice(l); }
+
+/* ── AUTH (Firebase email + password) ── */
+function doLogin(){
+  const email = document.getElementById('emailInput').value.trim();
+  const pwd = document.getElementById('pwdInput').value;
+  const err = document.getElementById('loginErr');
+  const btn = document.getElementById('loginBtn');
+  if(!email || !pwd){ document.getElementById('loginErrMsg').textContent = 'Enter your email and password.'; err.style.display='flex'; return; }
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in…';
+  window._signIn(email, pwd).then(() => {
+    err.style.display = 'none';
+    document.getElementById('pwdInput').value = '';
+    toast('Welcome back to SR Estates!', 'success');
+  }).catch(e => {
+    console.error(e);
+    const msg = /too-many-requests/.test(e.code||'') ? 'Too many attempts. Please wait a few minutes and try again.'
+              : /network/.test(e.code||'') ? 'No internet connection.'
+              : 'Invalid email or password. Try again.';
+    document.getElementById('loginErrMsg').textContent = msg;
+    err.style.display = 'flex';
+    document.getElementById('pwdInput').value = '';
+  }).finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fas fa-unlock"></i> Sign In'; });
+}
+function logout(){
+  window._signOut().catch(err => console.error(err));
+  document.getElementById('pwdInput').value = '';
+  document.getElementById('loginErr').style.display = 'none';
+}
+
+/* ── TABS ─────────────────────────────── */
+function switchTab(name,el){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+/* ── STATS ────────────────────────────── */
+function updateStats(){
+  const L = window._listings.filter(l => !l.sold);
+  document.getElementById('s1').textContent = window._listings.length;
+  document.getElementById('s2').textContent = L.filter(l => l.type === 'Plots').length;
+  document.getElementById('s3').textContent = L.filter(l => l.type === 'Individual House' || l.type === 'Apartments').length;
+  document.getElementById('s4').textContent = L.filter(l => l.listingType === 'rent').length;
+}
+
+/* ── DASHBOARD ────────────────────────── */
+function renderDashboard(){
+  const types={};
+  window._listings.forEach(l=>{types[l.type||'Unknown']=(types[l.type||'Unknown']||0)+1;});
+  const colors=['#DCAE4E','#FF6B2B','#0D9488','#C9A227','#7C3AED','#DC2626','#16A34A'];
+  const total=window._listings.length||1;
+  document.getElementById('typeBreakdown').innerHTML=Object.entries(types).sort((a,b)=>b[1]-a[1]).map(([t,n],i)=>{
+    const pct=Math.round(n/total*100);
+    return`<div style="margin-bottom:0.75rem"><div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:0.3rem"><span style="color:var(--text-main)">${t}</span><span style="color:var(--text-muted)">${n} (${pct}%)</span></div><div style="background:var(--panel2);border-radius:4px;height:6px;overflow:hidden"><div style="background:${colors[i%colors.length]};height:100%;width:${pct}%;border-radius:4px"></div></div></div>`;
+  }).join('')||'<p style="color:var(--text-muted);font-size:0.88rem">No listings yet</p>';
+
+  const recent=[...window._listings].slice(0,5);
+  document.getElementById('recentActivity').innerHTML=recent.map(l=>`<div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border);font-size:0.82rem"><div><div style="color:var(--text-main);font-weight:500">${l.title||l.customId||''}</div><div style="color:var(--text-muted)">${l.type||''} • ${l.location||''}</div></div><div style="color:var(--gold);font-weight:600;white-space:nowrap;margin-left:1rem">${formatPriceShort(l)}</div></div>`).join('')||'<p style="color:var(--text-muted);font-size:0.88rem">No listings yet</p>';
+}
+
+/* ── TABLE ────────────────────────────── */
+function renderTable(){
+  const search=(document.getElementById('adminSearch').value||'').toLowerCase();
+  const type=document.getElementById('adminTypeFilter').value;
+  const F=window._listings.filter(l=>{
+    const st=document.getElementById('adminStatusFilter').value;
+    const ms=!search||(l.title||'').toLowerCase().includes(search)||(l.location||'').toLowerCase().includes(search)||(l.customId||'').toLowerCase().includes(search);
+    const mt=!type||l.type===type;
+    const mst=!st||(st==='sold'?l.sold:st==='active'?!l.sold:l.listingType===st);
+    return ms&&mt&&mst;
+  });
+  const tbody=document.getElementById('adminTableBody');
+  if(!F.length){tbody.innerHTML=`<tr><td colspan="11"><div class="empty-table"><i class="fas fa-search"></i><p>No listings found</p></div></td></tr>`;return;}
+  tbody.innerHTML=F.map(l=>{
+    const img=l.images[0]?window.srImg(l.images[0],120):'https://via.placeholder.com/52x38/1A1838/555?text=No+Photo';
+    const date=l._added?l._added.toLocaleDateString('en-IN'):(l.oldId?'Migrated':'N/A');
+    const photoCount=(l.images&&l.images.length)||0;
+    const docCount=(l.documents&&l.documents.length)||0;
+    const isSold=!!l.sold;
+    const isAdv=!!l.advancePaid;
+    return`<tr class="${isSold?'row-sold':''}">
+      <td><img class="table-img" src="${img}" alt="" onerror="this.src='https://via.placeholder.com/52x38/1A1838/555?text=Err'"></td>
+      <td style="font-size:0.78rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;letter-spacing:0.02em">${l.customId||''}<br><span style="font-size:0.7rem;color:var(--border-light)">📅 ${date}</span></td>
+      <td style="max-width:180px"><div style="font-weight:500">${l.title}</div><div style="font-size:0.75rem;color:var(--text-muted)">${l.city||''}</div></td>
+      <td><span class="type-badge">${l.type||'N/A'}</span><div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.25rem">${l.listingType==='rent'?'For Rent':'For Sale'}</div></td>
+      <td style="color:var(--text-muted);font-size:0.85rem">${l.location}</td>
+      <td style="color:var(--text-muted);font-size:0.85rem;font-family:'JetBrains Mono',monospace;letter-spacing:0.02em">${l.size||'N/A'}</td>
+      <td class="price-text">${formatPriceShort(l)}</td>
+      <td><span style="background:rgba(13,148,136,0.12);color:var(--teal);padding:0.2rem 0.6rem;border-radius:6px;font-size:0.78rem;font-weight:600;font-family:'JetBrains Mono',monospace">📸 ${photoCount}</span>${docCount?` <span style="background:rgba(96,165,250,0.12);color:#D4AF37;padding:0.2rem 0.5rem;border-radius:6px;font-size:0.78rem;font-weight:600" title="${docCount} document(s) attached"><i class="fas fa-file-alt"></i> ${docCount}</span>`:''}${window.srYoutubeId(l.videoUrl)?' <span title="YouTube video attached" style="background:rgba(255,0,0,0.12);color:#FF0000;padding:0.2rem 0.5rem;border-radius:6px;font-size:0.78rem;font-weight:600"><i class="fab fa-youtube"></i></span>':''}${l.instaReelUrl?' <span title="Instagram reel attached" style="background:rgba(220,39,119,0.12);color:#E1306C;padding:0.2rem 0.5rem;border-radius:6px;font-size:0.78rem;font-weight:600"><i class="fab fa-instagram"></i></span>':''}${l.siteLocation?` <span title="${l.shareLocation?'Location shared with customer':'Location saved — admin only'}" style="background:${l.shareLocation?'rgba(34,197,94,0.12);color:#22C55E':'rgba(148,163,184,0.15);color:#A99569'};padding:0.2rem 0.5rem;border-radius:6px;font-size:0.78rem;font-weight:600"><i class="fas fa-map-marker-alt"></i></span>`:''}</td>
+      <td style="color:var(--text-muted);font-size:0.82rem;white-space:nowrap;font-family:'JetBrains Mono',monospace;letter-spacing:0.02em">${date}</td>
+      <td>
+        <div class="status-checks">
+          <label class="status-cb-label" title="Advance Paid — shown as badge on customer portal">
+            <input type="checkbox" ${isAdv?'checked':''} onchange="toggleStatus('${l.firestoreId}','advancePaid',this.checked)">
+            <span class="cb-pill adv ${isAdv?'checked':''}">💰 Adv. Paid</span>
+          </label>
+          <label class="status-cb-label cb-sold" title="Sold — hides property from customer portal">
+            <input type="checkbox" ${isSold?'checked':''} onchange="toggleStatus('${l.firestoreId}','sold',this.checked)">
+            <span class="cb-pill sold ${isSold?'checked':''}">🔴 Sold</span>
+          </label>
+        </div>
+      </td>
+      <td><div class="tbl-actions">
+        <a class="btn-tbl-edit" href="index.html?property=${l.id}" target="_blank" title="View on website" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none"><i class="fas fa-eye"></i></a>
+        <button class="btn-tbl-edit" onclick="openEditModal('${l.firestoreId}')"><i class="fas fa-edit"></i></button>
+        <button class="btn-tbl-del" onclick="deleteListing('${l.firestoreId}','${(l.customId||'')}')"><i class="fas fa-trash"></i></button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── MODAL OPEN/CLOSE ─────────────────── */
+function nextNumericId(){
+  let max = 0;
+  (window._listings || []).forEach(l => { const n = parseInt(l.firestoreId, 10); if (!isNaN(n) && n > max) max = n; });
+  return max + 1;
+}
+function generateCustomId(){ return 'SR' + nextNumericId(); }
+
+function openAddModal(){
+  editingId=null; editingCustomId=null;
+  currentImages=[];
+  currentDocs=[];
+  document.getElementById('modalHdrTitle').innerHTML='<i class="fas fa-plus-circle" style="color:var(--saffron);margin-right:0.5rem"></i>Add New Listing';
+  document.getElementById('fId').value='';
+  document.getElementById('fId').placeholder='Type ID (suggested: '+generateCustomId()+')';
+  ['fType','fTitle','fLocation','fCity','fSize','fPrice','fDimensions','fFacing','fDetails','fInstaReel','fYoutube','fSiteLocation','fFloorNumber','fUdsSqft','fLandUnitValue'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fDeal').value='sale';
+  document.getElementById('fCity').value='Chennai';
+  previewYoutube();
+  document.getElementById('floorFieldWrap').style.display='none';
+  document.getElementById('udsFieldWrap').style.display='none';
+  document.getElementById('landUnitFieldWrap').style.display='none';
+  document.getElementById('fLandUnit').value='Cent';
+  document.getElementById('fSizeReq').style.display='inline';
+  document.getElementById('fPriceUnit').value='L';
+  togglePriceInput();
+  document.getElementById('fOwner').value='SR Estates';
+  document.getElementById('fContact').value='+91 98414 36766';
+  document.getElementById('fShareLocation').checked=false;
+  document.getElementById('actualOwnerCheck').checked=false;
+  document.getElementById('actualOwnerFields').style.display='none';
+  document.getElementById('fActualOwnerName').value='';
+  document.getElementById('fActualOwnerContact').value='';
+  document.getElementById('fActualOwnerNotes').value='';
+  document.getElementById('imgPreviewRow').innerHTML='';
+  document.getElementById('uploadZone').classList.remove('has-img','uploading');
+  document.getElementById('uploadProgressWrap').classList.remove('show');
+  document.getElementById('docListRow').innerHTML='';
+  document.getElementById('docZone').classList.remove('has-doc');
+  document.getElementById('saveBtn').disabled=false;
+  document.getElementById('editModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function openEditModal(firestoreId){
+  const l=window._listings.find(x=>x.firestoreId===firestoreId);
+  if(!l)return;
+  editingId=firestoreId; editingCustomId=l.customId||l.id||generateCustomId();
+  currentImages=[...(l.images||[])];
+  currentDocs=[...(l.documents||[])];
+  document.getElementById('modalHdrTitle').innerHTML='<i class="fas fa-edit" style="color:var(--teal);margin-right:0.5rem"></i>Edit Listing';
+  document.getElementById('fId').value=editingCustomId;
+  document.getElementById('fType').value=l.type||'';
+  document.getElementById('fFloorNumber').value=l.floorNumber||'';
+  document.getElementById('fUdsSqft').value=l.udsSqft||'';
+  document.getElementById('fLandUnit').value=l.landUnit||'Cent';
+  document.getElementById('fLandUnitValue').value=l.landUnitValue||'';
+  toggleTypeFields(l.type||'');
+  document.getElementById('fTitle').value=l.title||'';
+  document.getElementById('fLocation').value=l.location||'';
+  document.getElementById('fCity').value=l.city||'';
+  document.getElementById('fSize').value=l.size||'';
+  {
+    let punit = l.priceUnit, pval = '';
+    if (punit === 'L' || punit === 'Cr') {
+      pval = l.priceValue != null ? l.priceValue : +(l.price / (punit === 'Cr' ? 10000000 : 100000)).toFixed(2);
+    } else if (punit === 'sqft' || punit === 'month') {
+      pval = l.price || '';
+    } else if (punit === 'request') {
+      pval = '';
+    } else { // migrated total price → show as Lakh / Crore
+      punit = l.price >= 10000000 ? 'Cr' : 'L';
+      pval = +(l.price / (punit === 'Cr' ? 10000000 : 100000)).toFixed(2);
+    }
+    document.getElementById('fPriceUnit').value = punit;
+    document.getElementById('fPrice').value = pval;
+    togglePriceInput();
+  }
+  document.getElementById('fDeal').value = l.listingType || 'sale';
+  document.getElementById('fYoutube').value = l.videoUrl || '';
+  previewYoutube();
+  document.getElementById('fDimensions').value=l.dimensions||'';
+  document.getElementById('fFacing').value=l.facing||'';
+  document.getElementById('fOwner').value=l.owner||'';
+  document.getElementById('fContact').value=l.contact||'';
+  document.getElementById('fDetails').value=l.details||'';
+  document.getElementById('fInstaReel').value=l.instaReelUrl||'';
+  document.getElementById('fSiteLocation').value=l.siteLocation||'';
+  document.getElementById('fShareLocation').checked=!!l.shareLocation;
+  const hasActualOwner = !!(l.actualOwnerName || l.actualOwnerContact);
+  document.getElementById('actualOwnerCheck').checked = hasActualOwner;
+  document.getElementById('actualOwnerFields').style.display = hasActualOwner ? 'grid' : 'none';
+  document.getElementById('fActualOwnerName').value = l.actualOwnerName||'';
+  document.getElementById('fActualOwnerContact').value = l.actualOwnerContact||'';
+  document.getElementById('fActualOwnerNotes').value = l.actualOwnerNotes||'';
+  renderImagePreviews();
+  document.getElementById('uploadProgressWrap').classList.remove('show');
+  renderDocList();
+  document.getElementById('saveBtn').disabled=false;
+  document.getElementById('editModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeEditModal(){document.getElementById('editModal').classList.remove('open');document.body.style.overflow='';}
+function closeModalOnOverlay(e){if(e.target===document.getElementById('editModal'))closeEditModal();}
+
+/* ── TYPE-SPECIFIC FIELD TOGGLE (Apartment: Floor/UDS · Agricultural Land: Land Unit) ── */
+function toggleTypeFields(type){
+  const floorWrap = document.getElementById('floorFieldWrap');
+  const udsWrap = document.getElementById('udsFieldWrap');
+  const landWrap = document.getElementById('landUnitFieldWrap');
+
+  const isApartment = type === 'Apartments';
+  floorWrap.style.display = isApartment ? 'block' : 'none';
+  udsWrap.style.display = isApartment ? 'block' : 'none';
+  if(!isApartment){
+    document.getElementById('fFloorNumber').value='';
+    document.getElementById('fUdsSqft').value='';
+  }
+
+  const isAgri = type === 'Agricultural Land';
+  landWrap.style.display = isAgri ? 'block' : 'none';
+  if(!isAgri){
+    document.getElementById('fLandUnit').value='Cent';
+    document.getElementById('fLandUnitValue').value='';
+  }
+  // Area Size isn't mandatory for Agricultural Land — cent/acre/ground fields cover it instead
+  document.getElementById('fSizeReq').style.display = isAgri ? 'none' : 'inline';
+}
+
+/* ── ACTUAL OWNER TOGGLE (Admin-only) ── */
+function toggleActualOwner(cb){
+  const fields = document.getElementById('actualOwnerFields');
+  fields.style.display = cb.checked ? 'grid' : 'none';
+  if(!cb.checked){
+    document.getElementById('fActualOwnerName').value='';
+    document.getElementById('fActualOwnerContact').value='';
+    document.getElementById('fActualOwnerNotes').value='';
+  }
+}
+
+/* ── PRICE INPUT ── */
+function togglePriceInput(){
+  const u = document.getElementById('fPriceUnit').value;
+  const p = document.getElementById('fPrice');
+  p.disabled = (u === 'request');
+  if (u === 'request') p.value = '';
+  p.placeholder = {L:'e.g. 85 (Lakh)', Cr:'e.g. 2.25 (Crore)', sqft:'e.g. 12000 per sq.ft', month:'e.g. 25000 per month', request:'Price on Request'}[u] || '';
+}
+
+/* ── YOUTUBE PREVIEW ── */
+function previewYoutube(){
+  const box = document.getElementById('ytPreview');
+  const v = document.getElementById('fYoutube').value.trim();
+  const id = window.srYoutubeId(v);
+  if (!v) { box.innerHTML = ''; return; }
+  box.innerHTML = id
+    ? `<div style="display:flex;align-items:center;gap:0.6rem;font-size:0.8rem;color:var(--teal)"><img src="https://i.ytimg.com/vi/${id}/mqdefault.jpg" style="width:96px;border-radius:6px"> <span><i class="fas fa-check-circle"></i> Video found — it will play on the property page</span></div>`
+    : `<div style="font-size:0.8rem;color:var(--saffron)"><i class="fas fa-exclamation-triangle"></i> Not a valid YouTube link</div>`;
+}
+
+/* ── IMAGE HANDLING (uploaded straight to Cloudinary; only URLs are saved in Firestore) ── */
+const MAX_PHOTOS = 15;
+
+function compressImage(file, maxW = 1600, quality = 0.85){
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if (w <= maxW && file.size < 1.5 * 1024 * 1024) { resolve(file); return; }
+        if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        canvas.toBlob(b => resolve(b || file), 'image/jpeg', quality);
+      };
+      img.onerror = () => resolve(file);
+      img.src = ev.target.result;
+    };
+    reader.onerror = () => resolve(file);
+    reader.readAsDataURL(file);
+  });
+}
+
+function uploadToCloudinary(fileOrBlob, resourceType, onProgress, fileName){
+  return new Promise((resolve, reject) => {
+    const fd = new FormData();
+    fd.append('file', fileOrBlob, fileName || 'upload');
+    fd.append('upload_preset', UPLOAD_PRESET);
+    fd.append('folder', resourceType === 'raw' ? 'sr-estates/new/docs' : 'sr-estates/new');
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`);
+    xhr.upload.onprogress = e => { if (e.lengthComputable && onProgress) onProgress(Math.round(e.loaded / e.total * 100)); };
+    xhr.onload = () => {
+      let res = {};
+      try { res = JSON.parse(xhr.responseText); } catch (e) {}
+      if (xhr.status >= 200 && xhr.status < 300 && res.secure_url) resolve(res);
+      else reject(new Error((res.error && res.error.message) || ('Upload failed (' + xhr.status + ')')));
+    };
+    xhr.onerror = () => reject(new Error('Network error — check your internet connection'));
+    xhr.send(fd);
+  });
+}
+
+let uploadsInFlight = 0;
+async function handleImgs(e){
+  const files = Array.from(e.target.files);
+  document.getElementById('imgFileInput').value='';
+  if(!files.length) return;
+  const slotsLeft = MAX_PHOTOS - currentImages.length;
+  if(slotsLeft <= 0){ toast(`Max ${MAX_PHOTOS} photos allowed. Remove one first.`, 'warning'); return; }
+  const allowed = files.slice(0, slotsLeft);
+  if(files.length > slotsLeft) toast(`Only ${slotsLeft} slot(s) left — extra photos ignored.`, 'warning');
+
+  const zone = document.getElementById('uploadZone');
+  const progWrap = document.getElementById('uploadProgressWrap');
+  const bar = document.getElementById('uploadBar');
+  const pct = document.getElementById('uploadPct');
+  const statusText = document.getElementById('uploadStatusText');
+  zone.classList.add('uploading');
+  progWrap.classList.add('show');
+  document.getElementById('saveBtn').disabled = true;
+
+  let done = 0;
+  for (const file of allowed) {
+    const slot = { uploading: true, preview: URL.createObjectURL(file) };
+    currentImages.push(slot);
+    renderImagePreviews();
+    uploadsInFlight++;
+    statusText.textContent = `Uploading photo ${done + 1} of ${allowed.length}…`;
+    try {
+      const blob = await compressImage(file);
+      const res = await uploadToCloudinary(blob, 'image', p => {
+        const overall = Math.round((done + p / 100) / allowed.length * 100);
+        bar.style.width = overall + '%'; pct.textContent = overall + '%';
+      }, (file.name || 'photo').replace(/\.[^.]+$/, '') + '.jpg');
+      const i = currentImages.indexOf(slot);
+      if (i !== -1) currentImages[i] = res.secure_url;
+    } catch (err) {
+      console.error(err);
+      const i = currentImages.indexOf(slot);
+      if (i !== -1) currentImages.splice(i, 1);
+      toast(`Photo "${file.name}" failed: ${err.message}`, 'error');
+    }
+    URL.revokeObjectURL(slot.preview);
+    uploadsInFlight--;
+    done++;
+    renderImagePreviews();
+  }
+  zone.classList.remove('uploading');
+  progWrap.classList.remove('show');
+  bar.style.width = '0%'; pct.textContent = '0%';
+  if (!uploadsInFlight) document.getElementById('saveBtn').disabled = false;
+}
+
+function renderImagePreviews(){
+  const row = document.getElementById('imgPreviewRow');
+  row.innerHTML = currentImages.map((img, i) => {
+    if (img && img.uploading) return `<div class="prev-item"><img src="${img.preview}"><div class="prev-uploading"><i class="fas fa-spinner fa-spin"></i></div></div>`;
+    return `<div class="prev-item" title="${i === 0 ? 'Cover photo' : 'Click ★ to make this the cover'}"><img src="${window.srImg(img, 200)}">${i === 0 ? '<span style="position:absolute;left:3px;bottom:3px;background:var(--gold);color:#000;font-size:0.6rem;font-weight:700;padding:1px 4px;border-radius:4px">COVER</span>' : `<button class="prev-rem" style="right:auto;left:3px;background:rgba(0,0,0,0.6)" onclick="event.stopPropagation();makeCover(${i})" title="Make cover photo"><i class="fas fa-star" style="pointer-events:none"></i></button>`}<button class="prev-rem" onclick="event.stopPropagation();removeImg(${i})"><i class="fas fa-times" style="pointer-events:none"></i></button></div>`;
+  }).join('');
+  document.getElementById('uploadZone').classList.toggle('has-img', currentImages.length > 0);
+}
+
+function makeCover(idx){
+  const [img] = currentImages.splice(idx, 1);
+  currentImages.unshift(img);
+  renderImagePreviews();
+}
+
+function removeImg(idx){
+  if (currentImages[idx] && currentImages[idx].uploading) return;
+  currentImages.splice(idx, 1);
+  renderImagePreviews();
+}
+
+/* ── DOCUMENT HANDLING (PDF / Word — uploaded to Cloudinary, only the URL is stored in Firestore) ── */
+const MAX_DOCS = 5;
+const MAX_DOC_BYTES = 10 * 1024 * 1024; // 10MB per file (Cloudinary free unsigned-upload default cap)
+
+function uploadDoc(file, onProgress){
+  return uploadToCloudinary(file, 'raw', onProgress, file.name).then(res => ({
+    downloadUrl: res.secure_url, viewUrl: res.secure_url, id: res.public_id
+  }));
+}
+
+async function handleDocs(e){
+  const files = Array.from(e.target.files);
+  const input = document.getElementById('docFileInput');
+  if(!files.length) return;
+  const slotsLeft = MAX_DOCS - currentDocs.length;
+  if(slotsLeft <= 0){
+    toast(`Max ${MAX_DOCS} documents allowed. Remove one first.`, 'warning');
+    input.value='';
+    return;
+  }
+  const allowed = files.slice(0, slotsLeft);
+  if(files.length > slotsLeft) toast(`Only ${slotsLeft} document slot(s) left — extra files ignored.`, 'warning');
+
+  const zone = document.getElementById('docZone');
+  const progWrap = document.getElementById('docUploadProgressWrap');
+  const bar = document.getElementById('docUploadBar');
+  const pct = document.getElementById('docUploadPct');
+  const statusText = document.getElementById('docUploadStatusText');
+
+  for(const file of allowed){
+    const okType = /\.(pdf|doc|docx)$/i.test(file.name);
+    if(!okType){ toast(`"${file.name}" isn't a PDF or Word file — skipped.`, 'warning'); continue; }
+    if(file.size > MAX_DOC_BYTES){
+      toast(`"${file.name}" is too large (max 10MB).`, 'error');
+      continue;
+    }
+
+    zone.classList.add('uploading');
+    progWrap.classList.add('show');
+    statusText.textContent = `Uploading ${file.name}…`;
+    bar.style.width = '0%';
+    pct.textContent = '0%';
+
+    try {
+      const result = await uploadDoc(file, p => { bar.style.width = p+'%'; pct.textContent = p+'%'; });
+      currentDocs.push({
+        name: file.name,
+        url: result.downloadUrl,
+        viewUrl: result.viewUrl,
+        fileId: result.id,
+        type: file.type || (file.name.toLowerCase().endsWith('.pdf') ? 'application/pdf' : 'application/msword'),
+        size: file.size
+      });
+      renderDocList();
+    } catch(err){
+      console.error(err);
+      toast(`Failed to upload "${file.name}": ${err.message}`, 'error');
+    }
+  }
+
+  zone.classList.remove('uploading');
+  progWrap.classList.remove('show');
+  input.value='';
+}
+
+function renderDocList(){
+  const row = document.getElementById('docListRow');
+  row.innerHTML = currentDocs.map((d, i) => {
+    const isPdf = /pdf/i.test(d.type||'') || /\.pdf$/i.test(d.name||'');
+    const sizeKb = d.size ? (d.size/1024).toFixed(0)+' KB' : '';
+    const uploading = !d.url && !d.data;
+    return `<div class="doc-chip">
+      <i class="doc-type-icon fas ${isPdf?'fa-file-pdf':'fa-file-word'}"></i>
+      <span class="doc-chip-name" title="${d.name}">${d.name}</span>
+      <span class="doc-chip-size">${sizeKb}</span>
+      <button class="doc-chip-rem" onclick="event.stopPropagation();removeDoc(${i})"><i class="fas fa-times" style="pointer-events:none"></i></button>
+    </div>`;
+  }).join('');
+  document.getElementById('docZone').classList.toggle('has-doc', currentDocs.length > 0);
+}
+
+function removeDoc(idx){
+  currentDocs.splice(idx, 1);
+  renderDocList();
+}
+
+/* ── SAVE LISTING ─────────────────────── */
+async function saveListing(){
+  const type=document.getElementById('fType').value;
+  const title=document.getElementById('fTitle').value.trim();
+  const location=document.getElementById('fLocation').value.trim();
+  const size=document.getElementById('fSize').value.trim();
+  const price=document.getElementById('fPrice').value;
+  const isAgri = type === 'Agricultural Land';
+  const priceUnitSel = document.getElementById('fPriceUnit').value;
+  if(currentImages.some(x => x && x.uploading)){toast('Please wait — photos are still uploading','warning');return;}
+  if(!type||!title||!location||(priceUnitSel!=='request'&&!price)||(!isAgri&&!size)){toast('Please fill in all required fields','error');return;}
+  if(isAgri && !document.getElementById('fLandUnitValue').value.trim()){toast('Please enter the land extent (Cent/Acre/Ground)','error');return;}
+
+  const priceUnit = priceUnitSel; // 'L' | 'Cr' | 'sqft' | 'month' | 'request'
+  const priceValue = priceUnit === 'request' ? null : (parseFloat(price) || 0);
+  const priceMult = priceUnit === 'Cr' ? 10000000 : priceUnit === 'L' ? 100000 : 1;
+  const priceFull = priceUnit === 'request' ? 0 : Math.round(priceValue * priceMult); // full rupee value — used for sort/filter
+
+  const saveBtn=document.getElementById('saveBtn');
+  saveBtn.disabled=true;
+  saveBtn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…';
+
+  try {
+    const customId=document.getElementById('fId').value.trim()||(editingId?editingCustomId:generateCustomId());
+    if((window._listings||[]).some(l=>l.firestoreId!==editingId&&(l.customId||'').toLowerCase()===customId.toLowerCase())){
+      toast('Property ID "'+customId+'" is already in use. Please choose a different ID.','error');
+      saveBtn.disabled=false;
+      saveBtn.innerHTML='<i class="fas fa-save"></i> Save Listing';
+      return;
+    }
+    const {doc,setDoc,serverTimestamp,collection}=window._fsLib;
+    const fsId=editingId||String(nextNumericId());
+
+    const listing={
+      customId,
+      type,title,
+      listingType:document.getElementById('fDeal').value,
+      location:document.getElementById('fLocation').value.trim(),
+      city:document.getElementById('fCity').value.trim(),
+      size,price:priceFull,priceUnit,priceValue,
+      dimensions:document.getElementById('fDimensions').value.trim(),
+      facing:document.getElementById('fFacing').value,
+      floorNumber: type==='Apartment' ? document.getElementById('fFloorNumber').value.trim() : '',
+      udsSqft: type==='Apartment' ? document.getElementById('fUdsSqft').value.trim() : '',
+      landUnit: type==='Agricultural Land' ? document.getElementById('fLandUnit').value : '',
+      landUnitValue: type==='Agricultural Land' ? document.getElementById('fLandUnitValue').value.trim() : '',
+      owner:document.getElementById('fOwner').value.trim(),
+      contact:document.getElementById('fContact').value.trim(),
+      details:document.getElementById('fDetails').value.trim(),
+      videoUrl:document.getElementById('fYoutube').value.trim(),
+      instaReelUrl:document.getElementById('fInstaReel').value.trim(),
+      siteLocation:document.getElementById('fSiteLocation').value.trim(),
+      shareLocation:document.getElementById('fShareLocation').checked,
+      actualOwnerName: document.getElementById('actualOwnerCheck').checked ? document.getElementById('fActualOwnerName').value.trim() : '',
+      actualOwnerContact: document.getElementById('actualOwnerCheck').checked ? document.getElementById('fActualOwnerContact').value.trim() : '',
+      actualOwnerNotes: document.getElementById('actualOwnerCheck').checked ? document.getElementById('fActualOwnerNotes').value.trim() : '',
+      images:currentImages.filter(x => typeof x === 'string'),
+      documents:[...currentDocs],
+      sold:editingId?!!(window._listings.find(l=>l.firestoreId===editingId)||{}).sold:false,
+      updatedAt:serverTimestamp()
+    };
+    // keep the original date; migrated listings keep their old position (no dateAdded)
+    if(!editingId) listing.dateAdded=serverTimestamp();
+
+    await setDoc(doc(window._db,'properties',fsId),listing,{merge:true});
+    closeEditModal();
+    toast(editingId?'Listing updated! ✅':'Listing added! ✅','success');
+  } catch(err){
+    console.error(err);
+    toast('Error saving listing: '+err.message,'error');
+    saveBtn.disabled=false;
+    saveBtn.innerHTML='<i class="fas fa-save"></i> Save Listing';
+  }
+}
+
+/* ── DELETE LISTING ───────────────────── */
+async function deleteListing(firestoreId,customId){
+  if(!confirm('Delete '+(customId||'this listing')+' permanently? (Tip: tick "Sold" instead if you only want to hide it.)'))return;
+  try {
+    const {doc,deleteDoc}=window._fsLib;
+    await deleteDoc(doc(window._db,'properties',firestoreId));
+    toast('Listing deleted','info');
+  } catch(err){toast('Error: '+err.message,'error');}
+}
+
+/* ── TOGGLE STATUS (Advance Paid / Sold) ── */
+async function toggleStatus(firestoreId, field, value){
+  try {
+    const {doc,updateDoc}=window._fsLib;
+    await updateDoc(doc(window._db,'properties',firestoreId),{[field]:value});
+    const label = field==='sold' ? (value?'Marked as Sold 🔴':'Unmarked as Sold') : (value?'Advance Paid marked ✅':'Advance Paid removed');
+    toast(label, value?'success':'info');
+  } catch(err){
+    toast('Error updating status: '+err.message,'error');
+  }
+}
+
+/* ── TOAST ────────────────────────────── */
+function toast(msg,type='success'){
+  const el=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  el.className='toast '+type+' show';
+  setTimeout(()=>el.classList.remove('show'),3500);
+}
+
+/* ── STAFF CONFIG ─────────────────────── */
+let editingStaffId = null;
+
+function openStaffModal(staffId){
+  editingStaffId = staffId || null;
+  const modal = document.getElementById('staffModal');
+  const title = document.getElementById('staffModalTitle');
+  if(editingStaffId){
+    const s = (window._staff||[]).find(x=>x.firestoreId===staffId);
+    title.innerHTML = '<i class="fas fa-user-edit" style="color:var(--indigo-light);margin-right:0.5rem"></i>Edit Staff';
+    document.getElementById('sName').value = s ? s.name : '';
+    document.getElementById('sNumber').value = s ? s.number : '';
+  } else {
+    title.innerHTML = '<i class="fas fa-user-plus" style="color:var(--indigo-light);margin-right:0.5rem"></i>Add New Staff';
+    document.getElementById('sName').value = '';
+    document.getElementById('sNumber').value = '';
+  }
+  updateStaffPreview();
+  modal.classList.add('open');
+}
+
+function closeStaffModal(){
+  document.getElementById('staffModal').classList.remove('open');
+  editingStaffId = null;
+}
+
+function closeStaffModalOnOverlay(e){
+  if(e.target.id==='staffModal') closeStaffModal();
+}
+
+function updateStaffPreview(){
+  const name = document.getElementById('sName').value.trim();
+  const num  = document.getElementById('sNumber').value.trim();
+  const preview = document.getElementById('staffPreview');
+  if(name || num){
+    preview.style.display = 'flex';
+    const initials = name ? name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2) : '?';
+    document.getElementById('prevAvatar').textContent = initials;
+    document.getElementById('prevName').textContent   = name || '—';
+    document.getElementById('prevNum').textContent    = num  || '—';
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
+async function saveStaff(){
+  const name   = document.getElementById('sName').value.trim();
+  const number = document.getElementById('sNumber').value.trim();
+  if(!name){ toast('Please enter staff name','warning'); return; }
+  if(!number){ toast('Please enter mobile number','warning'); return; }
+
+  const btn = document.getElementById('staffSaveBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+
+  try {
+    const {doc, setDoc, serverTimestamp} = window._fsLib;
+    const fsId = editingStaffId || ('staff_' + Date.now());
+    await setDoc(doc(window._db, 'staff', fsId), {
+      name, number,
+      createdAt: editingStaffId
+        ? ((window._staff||[]).find(s=>s.firestoreId===editingStaffId)||{}).createdAt || serverTimestamp()
+        : serverTimestamp()
+    });
+    closeStaffModal();
+    toast(editingStaffId ? 'Staff updated! ✅' : 'Staff added! ✅', 'success');
+  } catch(err){
+    console.error(err);
+    toast('Error: ' + err.message, 'error');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-save"></i> Save Staff';
+  }
+}
+
+async function deleteStaff(firestoreId, name){
+  if(!confirm(`Remove "${name}" from staff list?`)) return;
+  try {
+    const {doc, deleteDoc} = window._fsLib;
+    await deleteDoc(doc(window._db, 'staff', firestoreId));
+    toast('Staff removed', 'info');
+  } catch(err){ toast('Error: ' + err.message, 'error'); }
+}
+
+function renderStaffGrid(){
+  const staff = window._staff || [];
+  const grid  = document.getElementById('staffGrid');
+  const badge = document.getElementById('staffCountBadge');
+  if(badge) badge.innerHTML = `<i class="fas fa-user"></i> ${staff.length} Staff`;
+
+  if(!staff.length){
+    grid.innerHTML = `<div class="staff-empty"><i class="fas fa-users-slash"></i><p>No staff added yet. Click <strong>Add New Staff</strong> to get started.</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = staff.map(s => {
+    const initials = s.name ? s.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2) : '?';
+    return `
+      <div class="staff-card">
+        <div class="staff-avatar">${initials}</div>
+        <div class="staff-info">
+          <div class="staff-name">${s.name}</div>
+          <div class="staff-num"><i class="fas fa-phone"></i> ${s.number}</div>
+        </div>
+        <div class="staff-actions">
+          <button class="btn-tbl-edit" onclick="openStaffModal('${s.firestoreId}')"><i class="fas fa-pen"></i></button>
+          <button class="btn-tbl-del"  onclick="deleteStaff('${s.firestoreId}','${s.name.replace(/'/g,"\\'")}')"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+/* ── EXPORT TO EXCEL (CSV) ────────────── */
+function exportToExcel(){
+  const L = window._listings;
+  if(!L || !L.length){ toast('No listings to export','warning'); return; }
+
+  const headers = [
+    'Property ID','Title','Type','Sale / Rent','Location','City / District',
+    'Area Size','Price (₹)','Dimensions','Facing','Floor Number','UDS Sq.ft','Land Unit','Land Unit Value',
+    'Posted Date','Photo Count','Document Count','YouTube Link','Instagram Reel Link','Website Link',
+    'Owner Name','Owner Contact',
+    'Actual Owner Name (Admin)','Actual Owner Contact (Admin)',
+    'Additional Details'
+  ];
+
+  const rows = L.map(l => {
+    const date = l._added ? l._added.toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric'}) : (l.oldId ? 'Migrated' : '');
+    const photoCount = (l.images && l.images.length) || 0;
+    const docCount = (l.documents && l.documents.length) || 0;
+
+    return [
+      l.customId || '',
+      l.title || '',
+      l.type || '',
+      l.listingType === 'rent' ? 'Rent' : 'Sale',
+      l.location || '',
+      l.city || '',
+      l.size || '',
+      window.srFormatPrice(l),
+      l.dimensions || '',
+      l.facing || '',
+      l.floorNumber || '',
+      l.udsSqft || '',
+      l.landUnit || '',
+      l.landUnitValue || '',
+      date,
+      photoCount,
+      docCount,
+      l.videoUrl || '',
+      l.instaReelUrl || '',
+      location.origin + location.pathname.replace(/admin\.html$/, '') + '?property=' + l.id,
+      l.owner || '',
+      l.contact || '',
+      l.actualOwnerName || '',
+      l.actualOwnerContact || '',
+      l.details || ''
+    ];
+  });
+
+  // Build CSV string — wrap each cell in quotes, escape internal quotes
+  const escape = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const csvLines = [
+    headers.map(escape).join(','),
+    ...rows.map(r => r.map(escape).join(','))
+  ];
+  const csvContent = '\uFEFF' + csvLines.join('\r\n'); // BOM for Excel UTF-8
+
+  // Trigger download
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  const now  = new Date();
+  const ts   = now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0');
+  a.href     = url;
+  a.download = `SR_Estates_Listings_${ts}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  toast(`✅ Exported ${L.length} listing${L.length>1?'s':''} to Excel`, 'success');
+}
+</script>
+</body>
+</html>

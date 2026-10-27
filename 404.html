@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>SR Estates</title>
+<script>
+/* Old srestates.in links (PHP site) → new pages.
+   details.php?id=440  →  /?property=440   (opens that property)
+   about.php / contact.php → about.html / contact.html, anything else → home */
+(function () {
+  var host = location.hostname, path = location.pathname;
+  // GitHub project pages live under /<repo>/ — custom domain lives at /
+  var base = '/';
+  if (/\.github\.io$/.test(host)) {
+    var seg = path.split('/').filter(Boolean)[0];
+    if (seg) base = '/' + seg + '/';
+  }
+  var page = path.substring(path.lastIndexOf('/') + 1).toLowerCase();
+  var id = new URLSearchParams(location.search).get('id');
+  var to = base;
+  if (page === 'details.php' && id && /^\d+$/.test(id)) to = base + '?property=' + id;
+  else if (page === 'about.php') to = base + 'about.html';
+  else if (page === 'contact.php') to = base + 'contact.html';
+  location.replace(to);
+})();
+</script>
+</head>
+<body style="font-family:sans-serif;text-align:center;padding:4rem 1rem">
+  <p>Redirecting… <a href="/">Go to SR Estates home</a></p>
+</body>
+</html>
