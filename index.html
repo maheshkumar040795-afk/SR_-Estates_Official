@@ -691,23 +691,29 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem}
 .area-chip i{color:var(--sage);font-size:0.75rem}
 
 
-/* ── AD BANNERS (uploaded from Admin → Ads / Banners) ── */
-.ad-banner-wrap{max-width:1200px;margin:2rem auto 0;padding:0 1.5rem}
-.ad-slider{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 14px 40px rgba(15,23,42,0.16);background:#E9EEF5;touch-action:pan-y;margin:0 auto;transition:height 0.4s ease}
-.ad-track{display:flex;align-items:flex-start;transition:transform 0.6s cubic-bezier(0.22,0.61,0.36,1)}
-.ad-slide{flex:0 0 100%;display:block}
-.ad-slide img{width:100%;height:auto;display:block}
-.ad-nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:none;background:rgba(255,255,255,0.92);color:#1E293B;font-size:1.05rem;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.18);display:flex;align-items:center;justify-content:center;z-index:2;transition:transform 0.2s}
-.ad-nav:hover{transform:translateY(-50%) scale(1.08)}
+/* ── AD BANNERS (uploaded from Admin → Ads / Banners) — wide strip, like the Sandragon site ── */
+.ad-banner-wrap{margin:1.75rem auto 0;padding:0 24px;max-width:1880px}
+.ad-slider{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 18px 44px rgba(15,23,42,0.22);background:#0F172A;aspect-ratio:5/1;max-height:380px;width:100%;touch-action:pan-y}
+.ad-track{display:flex;height:100%;transition:transform 0.6s cubic-bezier(0.22,0.61,0.36,1)}
+.ad-slide{flex:0 0 100%;height:100%;position:relative;overflow:hidden;display:block}
+.ad-slide .ad-bg{position:absolute;inset:-30px;background-size:cover;background-position:center;filter:blur(22px) brightness(0.8);transform:scale(1.1)}
+.ad-slide img{position:relative;width:100%;height:100%;object-fit:contain;display:block}
+.ad-tag{position:absolute;top:14px;left:16px;z-index:3;background:rgba(15,23,42,0.72);color:#fff;font-size:0.72rem;font-weight:700;letter-spacing:1px;padding:0.28rem 0.6rem;border-radius:20px;border:1px solid rgba(255,255,255,0.25);backdrop-filter:blur(4px)}
+.ad-close{position:absolute;top:12px;right:14px;z-index:3;width:34px;height:34px;border-radius:50%;border:none;background:rgba(15,23,42,0.72);color:#fff;font-size:0.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s}
+.ad-close:hover{background:rgba(15,23,42,0.95)}
+.ad-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:none;background:rgba(255,255,255,0.9);color:#1E293B;font-size:1rem;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;z-index:2;opacity:0;transition:opacity 0.25s}
+.ad-slider:hover .ad-nav{opacity:1}
 .ad-nav.prev{left:16px}.ad-nav.next{right:16px}
-.ad-dots{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:7px;z-index:2}
-.ad-dot{width:9px;height:9px;border-radius:9px;border:none;background:rgba(255,255,255,0.65);cursor:pointer;padding:0;transition:all 0.3s;box-shadow:0 1px 4px rgba(0,0,0,0.25)}
-.ad-dot.active{width:26px;background:#fff}
+.ad-dots{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:7px;z-index:3}
+.ad-dot{width:9px;height:9px;border-radius:9px;border:none;background:rgba(255,255,255,0.6);cursor:pointer;padding:0;transition:all 0.3s;box-shadow:0 1px 4px rgba(0,0,0,0.3)}
+.ad-dot.active{width:26px;background:var(--gold,#FF762E)}
+@media(hover:none){.ad-nav{display:none!important}}
+@media(max-width:1024px){.ad-banner-wrap{padding:0 16px}.ad-slider{border-radius:18px}}
 @media(max-width:600px){
-  .ad-banner-wrap{margin-top:1.25rem;padding:0 1rem}
-  .ad-slider{border-radius:14px}
-  .ad-nav{width:32px;height:32px;font-size:0.8rem}
-  .ad-nav.prev{left:8px}.ad-nav.next{right:8px}
+  .ad-banner-wrap{margin-top:1.1rem;padding:0 12px}
+  .ad-slider{aspect-ratio:4/1;border-radius:14px}
+  .ad-tag{top:8px;left:9px;font-size:0.6rem;padding:0.18rem 0.45rem}
+  .ad-close{top:7px;right:8px;width:26px;height:26px;font-size:0.75rem}
   .ad-dots{bottom:6px}.ad-dot{width:7px;height:7px}.ad-dot.active{width:18px}
 }
 /* ── SR ESTATES THEME: logo shown on its own (no box / ring) ── */
@@ -824,6 +830,8 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem}
 <section class="ad-banner-wrap" id="adBanners" hidden aria-label="Offers and announcements">
   <div class="ad-slider" id="adSlider">
     <div class="ad-track" id="adTrack"></div>
+    <span class="ad-tag">AD</span>
+    <button class="ad-close" id="adClose" aria-label="Close ads"><i class="fas fa-times"></i></button>
     <button class="ad-nav prev" id="adPrev" aria-label="Previous banner"><i class="fas fa-chevron-left"></i></button>
     <button class="ad-nav next" id="adNext" aria-label="Next banner"><i class="fas fa-chevron-right"></i></button>
     <div class="ad-dots" id="adDots"></div>
@@ -1640,33 +1648,21 @@ function adGo(i) {
   adIndex = (i + adCount) % adCount;
   document.getElementById('adTrack').style.transform = `translateX(-${adIndex * 100}%)`;
   document.querySelectorAll('#adDots .ad-dot').forEach((d, k) => d.classList.toggle('active', k === adIndex));
-  adFitHeight();
 }
-const AD_MAX_H = () => window.innerWidth <= 600 ? 220 : window.innerWidth <= 1024 ? 260 : 300;
-function adFitHeight() {
-  const slide = document.querySelectorAll('#adTrack .ad-slide')[adIndex];
-  if (!slide) return;
-  const img = slide.querySelector('img');
-  const w = (img && (img.naturalWidth || +img.getAttribute('width'))) || 0;
-  const h = (img && (img.naturalHeight || +img.getAttribute('height'))) || 0;
-  const slider = document.getElementById('adSlider');
-  // keep the whole banner visible but no taller than AD_MAX_H: make the box narrower instead
-  slider.style.maxWidth = (w && h) ? Math.round(AD_MAX_H() * w / h) + 'px' : '';
-  requestAnimationFrame(() => { const sh = slide.offsetHeight; if (sh) slider.style.height = sh + 'px'; });
-}
-window.addEventListener('resize', adFitHeight);
 function adAuto() {
   clearInterval(adTimer);
   if (adCount > 1) adTimer = setInterval(() => adGo(adIndex + 1), 5000);
 }
 function renderBanners(list) {
   const wrap = document.getElementById('adBanners');
+  let closed = false; try { closed = sessionStorage.getItem('srAdsClosed') === '1'; } catch (e) {}
+  if (closed) list = [];
   adCount = list.length;
   if (!adCount) { wrap.hidden = true; clearInterval(adTimer); return; }
   const esc = v => String(v || '').replace(/"/g, '&quot;');
   document.getElementById('adTrack').innerHTML = list.map((b, k) => {
-    const ratio = (b.width && b.height) ? ` width="${b.width}" height="${b.height}"` : '';
-    const img = `<img src="${srImg(b.url, 1800)}"${ratio} alt="${esc(b.title || 'SR Estates offer')}" onload="adFitHeight()">`;
+    const src = srImg(b.url, 1920);
+    const img = `<span class="ad-bg" style="background-image:url('${src}')"></span><img src="${src}" alt="${esc(b.title || 'SR Estates offer')}" ${k ? 'loading="lazy"' : ''}>`;
     return b.link
       ? `<a class="ad-slide" href="${esc(b.link)}" ${/^https?:/i.test(b.link) && !/srestates\.in/i.test(b.link) ? 'target="_blank" rel="noopener"' : ''}>${img}</a>`
       : `<div class="ad-slide">${img}</div>`;
@@ -1678,7 +1674,12 @@ function renderBanners(list) {
   adGo(Math.min(adIndex, adCount - 1));
   adAuto();
 }
-window.adGo = adGo; window.adAuto = adAuto; window.adFitHeight = adFitHeight;
+window.adGo = adGo; window.adAuto = adAuto;
+document.getElementById('adClose').addEventListener('click', () => {
+  try { sessionStorage.setItem('srAdsClosed', '1'); } catch (e) {}
+  clearInterval(adTimer);
+  document.getElementById('adBanners').hidden = true;
+});
 document.getElementById('adPrev').addEventListener('click', () => { adGo(adIndex - 1); adAuto(); });
 document.getElementById('adNext').addEventListener('click', () => { adGo(adIndex + 1); adAuto(); });
 (() => {  // swipe on phones, pause on hover

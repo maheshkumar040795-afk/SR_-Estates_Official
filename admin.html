@@ -490,7 +490,7 @@ onSnapshot(staffQ, snap => {
     </div>
     <div class="banner-help">
       <i class="fas fa-circle-info"></i>
-      <div>Banners slide on the home page, between the numbers and the search box, and are always shown <b>in full</b> — nothing is cut. <b>Recommended: wide banners around 1600 × 400 to 1600 × 600 px</b>, all the same size so the slider doesn't change height. Keep text away from the far left/right edges (arrows sit there). Turn a banner <b>off</b> to hide it without deleting.</div>
+      <div>Banners slide on the home page, between the numbers and the search box, and are always shown <b>in full</b> — nothing is cut. <b>Best size: 1920 × 384 px</b> (wide 5:1 strip) — it fills the banner area exactly. Other sizes still show in full, centred on a blurred background. Keep text away from the far left/right edges (arrows sit there). Turn a banner <b>off</b> to hide it without deleting.</div>
     </div>
     <div class="upload-progress-wrap" id="bannerProgressWrap">
       <div class="upload-progress-bar-bg"><div class="upload-progress-bar-fill" id="bannerBar"></div></div>
@@ -1388,7 +1388,7 @@ function renderBanners(){
     <div class="banner-item ${b.active === false ? 'off' : ''}">
       <div class="banner-thumb"><img src="${window.srImg(b.url, 900)}" alt=""></div>
       <div class="banner-meta">
-        ${b.width && b.height ? `<div class="banner-size"><i class="fas fa-expand"></i> ${b.width} × ${b.height} px — shown in full on the website</div>` : ''}
+        ${b.width && b.height ? `<div class="banner-size"><i class="fas fa-expand"></i> ${b.width} × ${b.height} px — ${Math.abs(b.width / b.height - 5) < 0.4 ? 'perfect fit' : 'shown in full, centred'}</div>` : ''}
         <input class="f-input" placeholder="Title (optional, for your reference)" value="${esc(b.title)}" onchange="updateBanner('${b.firestoreId}',{title:this.value.trim()})">
         <input class="f-input" placeholder="Link when clicked (optional) e.g. ?property=440 or https://…" value="${esc(b.link)}" onchange="updateBanner('${b.firestoreId}',{link:this.value.trim()})">
         <div class="banner-actions">
