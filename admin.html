@@ -219,8 +219,9 @@ tr.row-sold td:first-child{position:relative}
 .banner-list{display:grid;gap:1rem}
 .banner-item{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:1.25rem;align-items:center;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:1rem}
 .banner-item.off{opacity:0.55}
-.banner-thumb{aspect-ratio:4/1;border-radius:12px;overflow:hidden;background:var(--panel2)}
-.banner-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.banner-thumb{border-radius:12px;overflow:hidden;background:var(--panel2);line-height:0}
+.banner-thumb img{width:100%;height:auto;display:block}
+.banner-size{font-size:0.75rem;color:var(--text-muted)}
 .banner-meta{display:flex;flex-direction:column;gap:0.6rem}
 .banner-meta .f-input{padding:0.5rem 0.7rem;font-size:0.85rem}
 .banner-actions{display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap}
@@ -489,7 +490,7 @@ onSnapshot(staffQ, snap => {
     </div>
     <div class="banner-help">
       <i class="fas fa-circle-info"></i>
-      <div>Banners slide on the home page, between the numbers and the search box. <b>Best size: 1600 × 400 px</b> (4:1, wide). Keep text and logos away from the left/right edges. Turn a banner <b>off</b> to hide it without deleting.</div>
+      <div>Banners slide on the home page, between the numbers and the search box, and are always shown <b>in full</b> — nothing is cut. <b>Recommended: wide banners around 1600 × 400 to 1600 × 600 px</b>, all the same size so the slider doesn't change height. Keep text away from the far left/right edges (arrows sit there). Turn a banner <b>off</b> to hide it without deleting.</div>
     </div>
     <div class="upload-progress-wrap" id="bannerProgressWrap">
       <div class="upload-progress-bar-bg"><div class="upload-progress-bar-fill" id="bannerBar"></div></div>
@@ -1387,6 +1388,7 @@ function renderBanners(){
     <div class="banner-item ${b.active === false ? 'off' : ''}">
       <div class="banner-thumb"><img src="${window.srImg(b.url, 900)}" alt=""></div>
       <div class="banner-meta">
+        ${b.width && b.height ? `<div class="banner-size"><i class="fas fa-expand"></i> ${b.width} × ${b.height} px — shown in full on the website</div>` : ''}
         <input class="f-input" placeholder="Title (optional, for your reference)" value="${esc(b.title)}" onchange="updateBanner('${b.firestoreId}',{title:this.value.trim()})">
         <input class="f-input" placeholder="Link when clicked (optional) e.g. ?property=440 or https://…" value="${esc(b.link)}" onchange="updateBanner('${b.firestoreId}',{link:this.value.trim()})">
         <div class="banner-actions">
@@ -1414,8 +1416,8 @@ async function handleBannerFiles(e){
     try {
       const blob = await compressImage(file, 2000, 0.9);
       const res = await uploadToCloudinary(blob, 'image', p => { bar.style.width = p + '%'; pct.textContent = p + '%'; }, 'banner-' + Date.now() + '.jpg');
-      if (res.width && res.height && res.width / res.height < 2.5)
-        toast(`"${file.name}" is not wide enough — it will be cropped. Best size is 1600 × 400.`, 'warning');
+      if (res.width && res.height && res.width / res.height < 1.6)
+        toast(`"${file.name}" is quite tall (${res.width}×${res.height}) — it will show in full but take a lot of space. A wide banner looks best.`, 'warning');
       const ref = doc(collection(window._db, 'banners'));
       await setDoc(ref, { url: res.secure_url, publicId: res.public_id, width: res.width || null, height: res.height || null,
                           title: '', link: '', active: true, order: ++order, createdAt: serverTimestamp() });

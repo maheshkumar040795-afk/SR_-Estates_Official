@@ -693,10 +693,10 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem}
 
 /* ── AD BANNERS (uploaded from Admin → Ads / Banners) ── */
 .ad-banner-wrap{max-width:1200px;margin:2rem auto 0;padding:0 1.5rem}
-.ad-slider{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 14px 40px rgba(15,23,42,0.16);background:#E9EEF5;aspect-ratio:4/1;touch-action:pan-y}
-.ad-track{display:flex;height:100%;transition:transform 0.6s cubic-bezier(0.22,0.61,0.36,1)}
-.ad-slide{flex:0 0 100%;height:100%;display:block}
-.ad-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.ad-slider{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 14px 40px rgba(15,23,42,0.16);background:#E9EEF5;touch-action:pan-y;transition:height 0.4s ease}
+.ad-track{display:flex;align-items:flex-start;transition:transform 0.6s cubic-bezier(0.22,0.61,0.36,1)}
+.ad-slide{flex:0 0 100%;display:block}
+.ad-slide img{width:100%;height:auto;display:block}
 .ad-nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:none;background:rgba(255,255,255,0.92);color:#1E293B;font-size:1.05rem;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.18);display:flex;align-items:center;justify-content:center;z-index:2;transition:transform 0.2s}
 .ad-nav:hover{transform:translateY(-50%) scale(1.08)}
 .ad-nav.prev{left:16px}.ad-nav.next{right:16px}
@@ -1640,7 +1640,14 @@ function adGo(i) {
   adIndex = (i + adCount) % adCount;
   document.getElementById('adTrack').style.transform = `translateX(-${adIndex * 100}%)`;
   document.querySelectorAll('#adDots .ad-dot').forEach((d, k) => d.classList.toggle('active', k === adIndex));
+  adFitHeight();
 }
+function adFitHeight() {
+  const slide = document.querySelectorAll('#adTrack .ad-slide')[adIndex];
+  const h = slide ? slide.offsetHeight : 0;
+  if (h) document.getElementById('adSlider').style.height = h + 'px';
+}
+window.addEventListener('resize', adFitHeight);
 function adAuto() {
   clearInterval(adTimer);
   if (adCount > 1) adTimer = setInterval(() => adGo(adIndex + 1), 5000);
@@ -1651,7 +1658,8 @@ function renderBanners(list) {
   if (!adCount) { wrap.hidden = true; clearInterval(adTimer); return; }
   const esc = v => String(v || '').replace(/"/g, '&quot;');
   document.getElementById('adTrack').innerHTML = list.map((b, k) => {
-    const img = `<img src="${srImg(b.url, 1800)}" alt="${esc(b.title || 'SR Estates offer')}" ${k ? 'loading="lazy"' : ''}>`;
+    const ratio = (b.width && b.height) ? ` width="${b.width}" height="${b.height}"` : '';
+    const img = `<img src="${srImg(b.url, 1800)}"${ratio} alt="${esc(b.title || 'SR Estates offer')}" onload="adFitHeight()">`;
     return b.link
       ? `<a class="ad-slide" href="${esc(b.link)}" ${/^https?:/i.test(b.link) && !/srestates\.in/i.test(b.link) ? 'target="_blank" rel="noopener"' : ''}>${img}</a>`
       : `<div class="ad-slide">${img}</div>`;
@@ -1663,7 +1671,7 @@ function renderBanners(list) {
   adGo(Math.min(adIndex, adCount - 1));
   adAuto();
 }
-window.adGo = adGo; window.adAuto = adAuto;
+window.adGo = adGo; window.adAuto = adAuto; window.adFitHeight = adFitHeight;
 document.getElementById('adPrev').addEventListener('click', () => { adGo(adIndex - 1); adAuto(); });
 document.getElementById('adNext').addEventListener('click', () => { adGo(adIndex + 1); adAuto(); });
 (() => {  // swipe on phones, pause on hover
