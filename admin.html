@@ -211,6 +211,27 @@ tr.row-sold td:first-child{position:relative}
 .staff-modal-box{max-width:420px}
 .staff-count-badge{background:rgba(255,118,46,0.15);border:1px solid rgba(255,118,46,0.3);color:var(--indigo-light);padding:0.3rem 0.75rem;border-radius:20px;font-size:0.78rem;font-weight:600}
 
+
+/* ── ADS / BANNERS ── */
+.banner-help{display:flex;gap:0.75rem;align-items:flex-start;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:0.9rem 1.1rem;color:var(--text-muted);font-size:0.86rem;line-height:1.55;margin-bottom:1.25rem}
+.banner-help i{color:var(--gold);margin-top:0.2rem}
+.banner-help b{color:var(--text-main)}
+.banner-list{display:grid;gap:1rem}
+.banner-item{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:1.25rem;align-items:center;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:1rem}
+.banner-item.off{opacity:0.55}
+.banner-thumb{aspect-ratio:4/1;border-radius:12px;overflow:hidden;background:var(--panel2)}
+.banner-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.banner-meta{display:flex;flex-direction:column;gap:0.6rem}
+.banner-meta .f-input{padding:0.5rem 0.7rem;font-size:0.85rem}
+.banner-actions{display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap}
+.banner-actions button{background:var(--panel2);border:1px solid var(--border);color:var(--text-main);border-radius:8px;padding:0.4rem 0.65rem;cursor:pointer;font-size:0.82rem}
+.banner-actions button:disabled{opacity:0.35;cursor:default}
+.banner-actions .del{color:#F87171;border-color:rgba(248,113,113,0.35)}
+.banner-toggle{display:inline-flex;align-items:center;gap:0.45rem;font-size:0.82rem;font-weight:600;color:var(--text-main);cursor:pointer;margin-right:auto}
+.banner-toggle input{width:16px;height:16px;accent-color:var(--gold)}
+.banner-empty{text-align:center;padding:3rem 1rem;color:var(--text-muted);border:2px dashed var(--border);border-radius:16px}
+.banner-empty i{font-size:2.2rem;display:block;margin-bottom:0.6rem}
+@media(max-width:800px){.banner-item{grid-template-columns:1fr}}
 /* ── SR ESTATES THEME: logo shown on its own (no box / ring) ── */
 .cinematic-logo-img,.logo-img,.login-badge,.admin-badge{background:none!important;box-shadow:none!important;border:none!important;border-radius:50%!important;padding:0!important;overflow:visible!important}
 .cinematic-logo-img img,.logo-img img,.login-badge img,.admin-badge img{border-radius:0!important;object-fit:contain!important;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.25))}
@@ -354,6 +375,12 @@ onSnapshot(collection(db, 'properties'), snap => {
   document.getElementById('dbBadge').innerHTML = '<span class="db-dot"></span> DB Error';
 });
 
+// Real-time listener — ad banners
+onSnapshot(collection(db, 'banners'), snap => {
+  window._banners = snap.docs.map(d => ({ firestoreId: d.id, ...d.data() })).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  renderBanners();
+}, err => console.error('Banner listener error:', err));
+
 // Real-time listener — staff collection
 const staffQ = query(collection(db, 'staff'), orderBy('createdAt', 'asc'));
 onSnapshot(staffQ, snap => {
@@ -398,6 +425,7 @@ onSnapshot(staffQ, snap => {
   <div class="admin-tabs">
     <button class="tab-btn" onclick="switchTab('dashboard',this)"><i class="fas fa-chart-bar"></i> Dashboard</button>
     <button class="tab-btn active" onclick="switchTab('listings',this)"><i class="fas fa-list"></i> Listings</button>
+    <button class="tab-btn" onclick="switchTab('banners',this)"><i class="fas fa-rectangle-ad"></i> Ads / Banners</button>
     <button class="tab-btn" onclick="switchTab('staff',this)"><i class="fas fa-users-cog"></i> Staff Config</button>
   </div>
 
@@ -447,6 +475,27 @@ onSnapshot(staffQ, snap => {
         <tbody id="adminTableBody"></tbody>
       </table>
     </div>
+  </div>
+
+  <!-- ADS / BANNERS TAB -->
+  <div class="tab-content" id="tab-banners">
+    <div class="section-header">
+      <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
+        <h2 class="section-title"><i class="fas fa-rectangle-ad" style="color:var(--gold);margin-right:0.5rem"></i>Ads / Banners</h2>
+        <span class="staff-count-badge" id="bannerCountBadge">0 Banners</span>
+      </div>
+      <button class="btn-add" onclick="document.getElementById('bannerFileInput').click()"><i class="fas fa-upload"></i> Upload Banner</button>
+      <input type="file" id="bannerFileInput" accept="image/jpeg,image/png,image/webp" multiple style="display:none" onchange="handleBannerFiles(event)">
+    </div>
+    <div class="banner-help">
+      <i class="fas fa-circle-info"></i>
+      <div>Banners slide on the home page, between the numbers and the search box. <b>Best size: 1600 × 400 px</b> (4:1, wide). Keep text and logos away from the left/right edges. Turn a banner <b>off</b> to hide it without deleting.</div>
+    </div>
+    <div class="upload-progress-wrap" id="bannerProgressWrap">
+      <div class="upload-progress-bar-bg"><div class="upload-progress-bar-fill" id="bannerBar"></div></div>
+      <div class="upload-progress-label"><span id="bannerStatusText">Uploading banner…</span><span id="bannerPct">0%</span></div>
+    </div>
+    <div class="banner-list" id="bannerList"></div>
   </div>
 
   <!-- STAFF CONFIG TAB -->
@@ -960,7 +1009,7 @@ function uploadToCloudinary(fileOrBlob, resourceType, onProgress, fileName){
     const fd = new FormData();
     fd.append('file', fileOrBlob, fileName || 'upload');
     fd.append('upload_preset', UPLOAD_PRESET);
-    fd.append('folder', resourceType === 'raw' ? 'sr-estates/new/docs' : 'sr-estates/new');
+    fd.append('folder', resourceType === 'raw' ? 'sr-estates/new/docs' : (fileName && fileName.startsWith('banner-') ? 'sr-estates/banners' : 'sr-estates/new'));
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`);
     xhr.upload.onprogress = e => { if (e.lengthComputable && onProgress) onProgress(Math.round(e.loaded / e.total * 100)); };
@@ -1319,6 +1368,86 @@ async function deleteStaff(firestoreId, name){
     await deleteDoc(doc(window._db, 'staff', firestoreId));
     toast('Staff removed', 'info');
   } catch(err){ toast('Error: ' + err.message, 'error'); }
+}
+
+/* ── ADS / BANNERS ── */
+window._banners = [];
+function renderBanners(){
+  const L = window._banners || [];
+  const badge = document.getElementById('bannerCountBadge');
+  const on = L.filter(b => b.active !== false).length;
+  badge.textContent = `${L.length} Banner${L.length === 1 ? '' : 's'} · ${on} showing`;
+  const box = document.getElementById('bannerList');
+  if (!L.length) {
+    box.innerHTML = `<div class="banner-empty"><i class="fas fa-image"></i><p>No banners yet. Click <b>Upload Banner</b> to add your first ad.</p></div>`;
+    return;
+  }
+  const esc = v => String(v || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+  box.innerHTML = L.map((b, i) => `
+    <div class="banner-item ${b.active === false ? 'off' : ''}">
+      <div class="banner-thumb"><img src="${window.srImg(b.url, 900)}" alt=""></div>
+      <div class="banner-meta">
+        <input class="f-input" placeholder="Title (optional, for your reference)" value="${esc(b.title)}" onchange="updateBanner('${b.firestoreId}',{title:this.value.trim()})">
+        <input class="f-input" placeholder="Link when clicked (optional) e.g. ?property=440 or https://…" value="${esc(b.link)}" onchange="updateBanner('${b.firestoreId}',{link:this.value.trim()})">
+        <div class="banner-actions">
+          <label class="banner-toggle"><input type="checkbox" ${b.active !== false ? 'checked' : ''} onchange="updateBanner('${b.firestoreId}',{active:this.checked})"> ${b.active !== false ? 'Showing' : 'Hidden'}</label>
+          <button title="Move up" ${i === 0 ? 'disabled' : ''} onclick="moveBanner(${i},-1)"><i class="fas fa-arrow-up"></i></button>
+          <button title="Move down" ${i === L.length - 1 ? 'disabled' : ''} onclick="moveBanner(${i},1)"><i class="fas fa-arrow-down"></i></button>
+          <button class="del" title="Delete" onclick="deleteBanner('${b.firestoreId}')"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+async function handleBannerFiles(e){
+  const files = Array.from(e.target.files || []);
+  e.target.value = '';
+  if (!files.length) return;
+  const wrap = document.getElementById('bannerProgressWrap');
+  const bar = document.getElementById('bannerBar'), pct = document.getElementById('bannerPct'), txt = document.getElementById('bannerStatusText');
+  wrap.classList.add('show');
+  const {doc, setDoc, collection, serverTimestamp} = window._fsLib;
+  let order = (window._banners || []).reduce((m, b) => Math.max(m, b.order ?? 0), 0);
+  for (let k = 0; k < files.length; k++) {
+    const file = files[k];
+    txt.textContent = `Uploading banner ${k + 1} of ${files.length}…`;
+    try {
+      const blob = await compressImage(file, 2000, 0.9);
+      const res = await uploadToCloudinary(blob, 'image', p => { bar.style.width = p + '%'; pct.textContent = p + '%'; }, 'banner-' + Date.now() + '.jpg');
+      if (res.width && res.height && res.width / res.height < 2.5)
+        toast(`"${file.name}" is not wide enough — it will be cropped. Best size is 1600 × 400.`, 'warning');
+      const ref = doc(collection(window._db, 'banners'));
+      await setDoc(ref, { url: res.secure_url, publicId: res.public_id, width: res.width || null, height: res.height || null,
+                          title: '', link: '', active: true, order: ++order, createdAt: serverTimestamp() });
+    } catch (err) {
+      console.error(err);
+      toast(`Banner "${file.name}" failed: ${err.message}`, 'error');
+    }
+  }
+  wrap.classList.remove('show'); bar.style.width = '0%'; pct.textContent = '0%';
+  toast('Banner uploaded ✅ — it is now live on the home page', 'success');
+}
+
+async function updateBanner(id, data){
+  try { const {doc, updateDoc} = window._fsLib; await updateDoc(doc(window._db, 'banners', id), data); toast('Banner updated', 'success'); }
+  catch (err) { toast('Error: ' + err.message, 'error'); }
+}
+
+async function moveBanner(i, dir){
+  const L = window._banners || []; const a = L[i], b = L[i + dir];
+  if (!a || !b) return;
+  const {doc, updateDoc} = window._fsLib;
+  const oa = a.order ?? i, ob = b.order ?? (i + dir);
+  try {
+    await updateDoc(doc(window._db, 'banners', a.firestoreId), { order: ob === oa ? oa + dir : ob });
+    await updateDoc(doc(window._db, 'banners', b.firestoreId), { order: oa });
+  } catch (err) { toast('Error: ' + err.message, 'error'); }
+}
+
+async function deleteBanner(id){
+  if (!confirm('Delete this banner from the website? (Tip: untick "Showing" to just hide it.)')) return;
+  try { const {doc, deleteDoc} = window._fsLib; await deleteDoc(doc(window._db, 'banners', id)); toast('Banner deleted', 'info'); }
+  catch (err) { toast('Error: ' + err.message, 'error'); }
 }
 
 function renderStaffGrid(){

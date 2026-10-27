@@ -690,6 +690,26 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem}
 .area-chip{display:inline-flex;align-items:center;gap:0.4rem;background:var(--mint);color:var(--forest-mid);font-weight:600;font-size:0.85rem;padding:0.55rem 1.1rem;border-radius:9999px;border:1px solid var(--border)}
 .area-chip i{color:var(--sage);font-size:0.75rem}
 
+
+/* ── AD BANNERS (uploaded from Admin → Ads / Banners) ── */
+.ad-banner-wrap{max-width:1200px;margin:2rem auto 0;padding:0 1.5rem}
+.ad-slider{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 14px 40px rgba(15,23,42,0.16);background:#E9EEF5;aspect-ratio:4/1;touch-action:pan-y}
+.ad-track{display:flex;height:100%;transition:transform 0.6s cubic-bezier(0.22,0.61,0.36,1)}
+.ad-slide{flex:0 0 100%;height:100%;display:block}
+.ad-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.ad-nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:none;background:rgba(255,255,255,0.92);color:#1E293B;font-size:1.05rem;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.18);display:flex;align-items:center;justify-content:center;z-index:2;transition:transform 0.2s}
+.ad-nav:hover{transform:translateY(-50%) scale(1.08)}
+.ad-nav.prev{left:16px}.ad-nav.next{right:16px}
+.ad-dots{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:7px;z-index:2}
+.ad-dot{width:9px;height:9px;border-radius:9px;border:none;background:rgba(255,255,255,0.65);cursor:pointer;padding:0;transition:all 0.3s;box-shadow:0 1px 4px rgba(0,0,0,0.25)}
+.ad-dot.active{width:26px;background:#fff}
+@media(max-width:600px){
+  .ad-banner-wrap{margin-top:1.25rem;padding:0 1rem}
+  .ad-slider{border-radius:14px}
+  .ad-nav{width:32px;height:32px;font-size:0.8rem}
+  .ad-nav.prev{left:8px}.ad-nav.next{right:8px}
+  .ad-dots{bottom:6px}.ad-dot{width:7px;height:7px}.ad-dot.active{width:18px}
+}
 /* ── SR ESTATES THEME: logo shown on its own (no box / ring) ── */
 .cinematic-logo-img,.logo-img,.login-badge,.admin-badge{background:none!important;box-shadow:none!important;border:none!important;border-radius:50%!important;padding:0!important;overflow:visible!important}
 .cinematic-logo-img img,.logo-img img,.login-badge img,.admin-badge img{border-radius:0!important;object-fit:contain!important;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.25))}
@@ -799,6 +819,16 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem}
   <div class="stat-item stat-enter" style="animation-delay:160ms"><div class="stat-num" id="statHouse">0</div><div class="stat-lbl">Houses &amp; Flats</div></div>
   <div class="stat-item stat-enter" style="animation-delay:240ms"><div class="stat-num" id="statToday">0</div><div class="stat-lbl">For Rent</div></div>
 </div>
+
+<!-- AD BANNERS (hidden until the admin uploads one) -->
+<section class="ad-banner-wrap" id="adBanners" hidden aria-label="Offers and announcements">
+  <div class="ad-slider" id="adSlider">
+    <div class="ad-track" id="adTrack"></div>
+    <button class="ad-nav prev" id="adPrev" aria-label="Previous banner"><i class="fas fa-chevron-left"></i></button>
+    <button class="ad-nav next" id="adNext" aria-label="Next banner"><i class="fas fa-chevron-right"></i></button>
+    <div class="ad-dots" id="adDots"></div>
+  </div>
+</section>
 
 <!-- SEARCH BAR -->
 <div style="max-width:1200px;margin:1.5rem auto 0;padding:0 1.5rem">
@@ -1602,6 +1632,56 @@ document.getElementById('heroPrice').addEventListener('input',   applyFilters);
 document.getElementById('sortSelect').addEventListener('change', applyFilters);
 const btnSearch = document.getElementById('btnSearch');
 if(btnSearch) btnSearch.addEventListener('click', () => { applyFilters(); document.getElementById('listings').scrollIntoView({behavior:'smooth'}); });
+
+/* ── AD BANNER SLIDER ── */
+let adIndex = 0, adCount = 0, adTimer = null;
+function adGo(i) {
+  if (!adCount) return;
+  adIndex = (i + adCount) % adCount;
+  document.getElementById('adTrack').style.transform = `translateX(-${adIndex * 100}%)`;
+  document.querySelectorAll('#adDots .ad-dot').forEach((d, k) => d.classList.toggle('active', k === adIndex));
+}
+function adAuto() {
+  clearInterval(adTimer);
+  if (adCount > 1) adTimer = setInterval(() => adGo(adIndex + 1), 5000);
+}
+function renderBanners(list) {
+  const wrap = document.getElementById('adBanners');
+  adCount = list.length;
+  if (!adCount) { wrap.hidden = true; clearInterval(adTimer); return; }
+  const esc = v => String(v || '').replace(/"/g, '&quot;');
+  document.getElementById('adTrack').innerHTML = list.map((b, k) => {
+    const img = `<img src="${srImg(b.url, 1800)}" alt="${esc(b.title || 'SR Estates offer')}" ${k ? 'loading="lazy"' : ''}>`;
+    return b.link
+      ? `<a class="ad-slide" href="${esc(b.link)}" ${/^https?:/i.test(b.link) && !/srestates\.in/i.test(b.link) ? 'target="_blank" rel="noopener"' : ''}>${img}</a>`
+      : `<div class="ad-slide">${img}</div>`;
+  }).join('');
+  document.getElementById('adDots').innerHTML = adCount > 1
+    ? list.map((_, k) => `<button class="ad-dot" aria-label="Banner ${k + 1}" onclick="adGo(${k});adAuto()"></button>`).join('') : '';
+  document.getElementById('adPrev').style.display = document.getElementById('adNext').style.display = adCount > 1 ? 'flex' : 'none';
+  wrap.hidden = false;
+  adGo(Math.min(adIndex, adCount - 1));
+  adAuto();
+}
+window.adGo = adGo; window.adAuto = adAuto;
+document.getElementById('adPrev').addEventListener('click', () => { adGo(adIndex - 1); adAuto(); });
+document.getElementById('adNext').addEventListener('click', () => { adGo(adIndex + 1); adAuto(); });
+(() => {  // swipe on phones, pause on hover
+  const el = document.getElementById('adSlider'); let x0 = null;
+  el.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; clearInterval(adTimer); }, { passive: true });
+  el.addEventListener('touchend', e => {
+    if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; x0 = null;
+    if (Math.abs(dx) > 40) adGo(adIndex + (dx < 0 ? 1 : -1)); adAuto();
+  });
+  el.addEventListener('mouseenter', () => clearInterval(adTimer));
+  el.addEventListener('mouseleave', adAuto);
+})();
+onSnapshot(collection(db, 'banners'), snap => {
+  const list = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+    .filter(b => b.active !== false && b.url)
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  renderBanners(list);
+}, err => console.error('Banner load error:', err));
 
 loadListings();
 loadStaff();
