@@ -245,6 +245,13 @@ function srMapType(cat, title){
   };
   return pick(c) || pick(t) || 'Plots';
 }
+/* Property ID shown to customers: ID-441 (old "SR441" values are converted) */
+function srDisplayId(customId, num){
+  const c = String(customId || '').trim();
+  if (!c) return 'ID-' + num;
+  const m = c.match(/^(?:SR|ID)?[\s-]*(\d+)$/i);
+  return m ? 'ID-' + m[1] : c;
+}
 function srNormalize(fsId, d){
   d = d || {};
   const images = (d.images||[]).map(x => typeof x === 'string' ? x : (x && x.url)).filter(Boolean);
@@ -263,8 +270,8 @@ function srNormalize(fsId, d){
   return {
     ...d,
     firestoreId: fsId,
-    id: d.customId || ('SR' + (d.oldId || fsId)),
-    customId: d.customId || ('SR' + (d.oldId || fsId)),
+    id: srDisplayId(d.customId, d.oldId || fsId),
+    customId: srDisplayId(d.customId, d.oldId || fsId),
     type, listingType, price, priceUnit,
     title: d.title || '',
     location: d.location != null ? d.location : (d.address || ''),
@@ -304,7 +311,7 @@ function srYoutubeId(url){
   return m ? m[1] : '';
 }
 
-window.srNormalize = srNormalize; window.srFormatPrice = srFormatPrice; window.srImg = srImg; window.srYoutubeId = srYoutubeId;
+window.srNormalize = srNormalize; window._srIdFmt = c => srDisplayId(c, ''); window.srFormatPrice = srFormatPrice; window.srImg = srImg; window.srYoutubeId = srYoutubeId;
 
 const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
@@ -524,7 +531,7 @@ onSnapshot(staffQ, snap => {
       </div>
 
       <div class="form-grid" style="margin-top:1.25rem">
-        <div><div class="f-label">Property ID</div><input type="text" class="f-input" id="fId" placeholder="e.g. SR442"></div>
+        <div><div class="f-label">Property ID</div><input type="text" class="f-input" id="fId" placeholder="e.g. ID-442 (same as the ID on the photo)"></div>
         <div><div class="f-label">Property Type <span style="color:var(--saffron)">*</span></div>
           <select class="f-input" id="fType" onchange="toggleTypeFields(this.value)">
             <option value="">Select Type</option>
@@ -637,6 +644,7 @@ window._listings  = [];
 let editingId     = null;
 let editingCustomId = null;
 let currentImages = [];   // Cloudinary URLs (or {uploading:true} placeholders) for new & existing photos
+function srDisplayIdPublic(c){ return window._srIdFmt(c); }
 let currentDocs   = [];   // {name, type, size, url} — Cloudinary-hosted PDFs/Word docs
 
 function formatPriceShort(l){ return window.srFormatPrice(l); }
@@ -758,7 +766,7 @@ function nextNumericId(){
   (window._listings || []).forEach(l => { const n = parseInt(l.firestoreId, 10); if (!isNaN(n) && n > max) max = n; });
   return max + 1;
 }
-function generateCustomId(){ return 'SR' + nextNumericId(); }
+function generateCustomId(){ return 'ID-' + nextNumericId(); }
 
 function openAddModal(){
   editingId=null; editingCustomId=null;
@@ -1139,7 +1147,7 @@ async function saveListing(){
   saveBtn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…';
 
   try {
-    const customId=document.getElementById('fId').value.trim()||(editingId?editingCustomId:generateCustomId());
+    const customId=srDisplayIdPublic(document.getElementById('fId').value.trim()||(editingId?editingCustomId:generateCustomId()));
     if((window._listings||[]).some(l=>l.firestoreId!==editingId&&(l.customId||'').toLowerCase()===customId.toLowerCase())){
       toast('Property ID "'+customId+'" is already in use. Please choose a different ID.','error');
       saveBtn.disabled=false;

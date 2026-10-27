@@ -310,7 +310,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--smoke);color:var(--text);
 
 /* LISTINGS */
 .listings-container{max-width:1200px;margin:0 auto;padding:0 1.5rem 4rem}
-.listings-grid{justify-items:center}
+.listings-grid{justify-items:center;align-items:stretch}
 .listings-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
 .listings-title{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--forest)}
 .listings-count{font-size:0.85rem;color:var(--muted);background:var(--border);padding:0.3rem 0.8rem;border-radius:20px}
@@ -362,7 +362,26 @@ body{font-family:'DM Sans',sans-serif;background:var(--smoke);color:var(--text);
   color:white;padding:0.25rem 0.7rem;border-radius:8px;font-size:0.75rem;font-weight:600;
   margin-bottom:0.4rem;
 }
-.card-body{padding:1rem}
+.card-body{padding:1rem;flex:1;display:flex;flex-direction:column}
+.property-card{display:flex;flex-direction:column;align-self:stretch}
+.card-title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
+.card-loc-text{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spec-item{min-width:0}
+.spec-text{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.card-price-block{min-height:2.9rem;display:flex;flex-direction:column;justify-content:center}
+/* sections + pagination */
+.sec-head{text-align:center;margin:3rem 0 0.25rem}
+.sec-eyebrow{color:var(--sage);font-size:0.8rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.35rem}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,4vw,2.4rem);color:var(--forest)}
+.sec-filters{justify-content:center;margin-top:0.5rem;margin-bottom:0.75rem}
+.sec-filters .sort-select{margin-left:0}
+.pager{display:flex;justify-content:center;align-items:center;gap:0.4rem;margin-top:2rem;flex-wrap:wrap}
+.pager button{min-width:40px;height:40px;padding:0 0.6rem;border-radius:10px;border:1.5px solid var(--border);background:#fff;color:var(--text);font-weight:600;font-size:0.9rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+.pager button:hover:not(:disabled){border-color:var(--forest-light)}
+.pager button.active{background:var(--forest);color:#fff;border-color:var(--forest)}
+.pager button:disabled{opacity:0.35;cursor:default}
+.pager .pager-gap{color:var(--muted);padding:0 0.2rem}
+.pager-info{text-align:center;color:var(--muted);font-size:0.8rem;margin-top:0.6rem}
 .card-id{
   display:inline-block;background:#F3E4C8;color:var(--forest-mid);
   padding:0.2rem 0.6rem;border-radius:6px;font-size:0.72rem;font-weight:700;margin-bottom:0.5rem;
@@ -373,7 +392,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--smoke);color:var(--text);
 .card-specs{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:1rem}
 .spec-item{display:flex;align-items:center;gap:0.4rem;font-size:0.82rem;color:#555}
 .spec-item i{color:var(--sage);width:14px}
-.card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:1rem;border-top:1px solid var(--border)}
+.card-footer{display:flex;align-items:center;justify-content:space-between;gap:0.5rem;padding-top:1rem;border-top:1px solid var(--border);margin-top:auto}
 .card-price{font-family:'Noto Sans','DM Sans',sans-serif;font-size:1.3rem;font-weight:700;color:var(--forest-mid);font-variant-numeric:tabular-nums;letter-spacing:-0.3px}
 .card-actions{display:flex;gap:0.5rem}
 .btn-view{
@@ -724,7 +743,8 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem}
     </button>
     <div class="cinematic-nav-links" id="navLinksMenu">
       <a href="#" class="cinematic-nav-link active" onclick="closeMobileNav()">Home</a>
-      <a href="#listings" class="cinematic-nav-link" onclick="closeMobileNav()">Listings</a>
+      <a href="#listings" class="cinematic-nav-link" onclick="closeMobileNav()">Buy</a>
+      <a href="#rent" class="cinematic-nav-link" onclick="closeMobileNav()">Rent</a>
       <a href="about.html" class="cinematic-nav-link" onclick="closeMobileNav()">About</a>
       <a href="contact.html" class="cinematic-nav-link" onclick="closeMobileNav()">Contact</a>
       <a href="admin.html" class="cinematic-nav-cta" onclick="closeMobileNav()">Admin Panel</a>
@@ -790,41 +810,57 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem}
   </div>
 </div>
 
-<!-- FILTER BAR -->
-<div class="filter-bar" id="listings">
-  <span class="filter-label">Filter:</span>
-  <button class="filter-chip active" onclick="setChipFilter('', this)">All</button>
-  <button class="filter-chip" onclick="setChipFilter('Plots', this)">Plots</button>
-  <button class="filter-chip" onclick="setChipFilter('Individual House', this)">Individual House</button>
-  <button class="filter-chip" onclick="setChipFilter('Apartments', this)">Apartments</button>
-  <button class="filter-chip" onclick="setChipFilter('Commercial Property', this)">Commercial</button>
-  <select class="sort-select" id="dealSelect" title="Buy or Rent">
-    <option value="">Buy &amp; Rent</option>
-    <option value="sale">For Sale</option>
-    <option value="rent">For Rent</option>
-  </select>
-  <select class="sort-select" id="sortSelect">
-    <option value="newest">Newest First</option>
-    <option value="oldest">Oldest First</option>
-    <option value="price-low">Price ↑</option>
-    <option value="price-high">Price ↓</option>
-    <option value="area">Largest Area</option>
-  </select>
-</div>
+<!-- BUY A PROPERTY -->
+<section class="listings-container" id="listings">
+  <div class="sec-head">
+    <div class="sec-eyebrow">Latest Properties</div>
+    <h2 class="sec-title">Buy a Property</h2>
+  </div>
+  <div class="filter-bar sec-filters" id="saleChips">
+    <button class="filter-chip active" onclick="setChipFilter('sale', '', this)">View All</button>
+    <button class="filter-chip" onclick="setChipFilter('sale', 'Plots', this)">Plots</button>
+    <button class="filter-chip" onclick="setChipFilter('sale', 'Individual House', this)">Individual House</button>
+    <button class="filter-chip" onclick="setChipFilter('sale', 'Apartments', this)">Apartments</button>
+    <button class="filter-chip" onclick="setChipFilter('sale', 'Commercial Property', this)">Commercial Property</button>
+    <select class="sort-select" id="sortSelect" title="Sort">
+      <option value="newest">Newest First</option>
+      <option value="oldest">Oldest First</option>
+      <option value="price-low">Price ↑</option>
+      <option value="price-high">Price ↓</option>
+      <option value="area">Largest Area</option>
+    </select>
+  </div>
+  <div class="listings-header" style="justify-content:flex-end"><span class="listings-count" id="saleCount">Loading...</span></div>
+  <div class="listings-grid" id="saleGrid">
+    <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line med"></div><div class="skeleton-line full"></div><div class="skeleton-line full"></div><div class="skeleton-line price"></div></div></div>
+    <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line med"></div><div class="skeleton-line full"></div><div class="skeleton-line full"></div><div class="skeleton-line price"></div></div></div>
+    <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line med"></div><div class="skeleton-line full"></div><div class="skeleton-line full"></div><div class="skeleton-line price"></div></div></div>
+  </div>
+  <div class="pager" id="salePager"></div>
+  <div class="pager-info" id="salePagerInfo"></div>
+</section>
 
-<!-- LISTINGS -->
-<div class="listings-container">
-  <div class="listings-header">
-    <h2 class="listings-title"><i class="fas fa-seedling" style="color:var(--forest-light);margin-right:0.5rem"></i>Available Properties</h2>
-    <span class="listings-count" id="listingsCount">Loading...</span>
+<!-- RENT A PROPERTY -->
+<section class="listings-container" id="rent">
+  <div class="sec-head">
+    <div class="sec-eyebrow">Latest Properties</div>
+    <h2 class="sec-title">Rent a Property</h2>
   </div>
-  <div class="listings-grid" id="listingsGrid">
-    <!-- Skeleton cards shown while Firebase loads -->
+  <div class="filter-bar sec-filters" id="rentChips">
+    <button class="filter-chip active" onclick="setChipFilter('rent', '', this)">View All</button>
+    <button class="filter-chip" onclick="setChipFilter('rent', 'Individual House', this)">Individual House</button>
+    <button class="filter-chip" onclick="setChipFilter('rent', 'Apartments', this)">Apartments</button>
+    <button class="filter-chip" onclick="setChipFilter('rent', 'Commercial Property', this)">Commercial Property</button>
+  </div>
+  <div class="listings-header" style="justify-content:flex-end"><span class="listings-count" id="rentCount">Loading...</span></div>
+  <div class="listings-grid" id="rentGrid">
     <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line med"></div><div class="skeleton-line full"></div><div class="skeleton-line full"></div><div class="skeleton-line price"></div></div></div>
     <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line med"></div><div class="skeleton-line full"></div><div class="skeleton-line full"></div><div class="skeleton-line price"></div></div></div>
     <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line med"></div><div class="skeleton-line full"></div><div class="skeleton-line full"></div><div class="skeleton-line price"></div></div></div>
   </div>
-</div>
+  <div class="pager" id="rentPager"></div>
+  <div class="pager-info" id="rentPagerInfo"></div>
+</section>
 
 <!-- PROPERTY DETAIL MODAL -->
 <div class="modal-overlay" id="detailModal" onclick="closeDetailOnOverlay(event)">
@@ -1031,6 +1067,13 @@ function srMapType(cat, title){
   };
   return pick(c) || pick(t) || 'Plots';
 }
+/* Property ID shown to customers: ID-441 (old "SR441" values are converted) */
+function srDisplayId(customId, num){
+  const c = String(customId || '').trim();
+  if (!c) return 'ID-' + num;
+  const m = c.match(/^(?:SR|ID)?[\s-]*(\d+)$/i);
+  return m ? 'ID-' + m[1] : c;
+}
 function srNormalize(fsId, d){
   d = d || {};
   const images = (d.images||[]).map(x => typeof x === 'string' ? x : (x && x.url)).filter(Boolean);
@@ -1049,8 +1092,8 @@ function srNormalize(fsId, d){
   return {
     ...d,
     firestoreId: fsId,
-    id: d.customId || ('SR' + (d.oldId || fsId)),
-    customId: d.customId || ('SR' + (d.oldId || fsId)),
+    id: srDisplayId(d.customId, d.oldId || fsId),
+    customId: srDisplayId(d.customId, d.oldId || fsId),
     type, listingType, price, priceUnit,
     title: d.title || '',
     location: d.location != null ? d.location : (d.address || ''),
@@ -1097,8 +1140,8 @@ const db  = initializeFirestore(app, {
 });
 
 let listings = [];
-let filtered = [];
-let activeChipType = '';
+const PAGE_SIZE = 12;
+const sections = { sale: { type: '', page: 1, items: [] }, rent: { type: '', page: 1, items: [] } };
 let currentDetailId = null;
 let galIndex = 0;
 let staffList = []; // staff loaded from Firestore
@@ -1113,12 +1156,6 @@ function loadStaff() {
   });
 }
 
-function showSkeletons() {
-  const grid = document.getElementById('listingsGrid');
-  const skeletonHtml = `<div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line med"></div><div class="skeleton-line full"></div><div class="skeleton-line full"></div><div class="skeleton-line price"></div></div></div>`.repeat(6);
-  grid.innerHTML = skeletonHtml;
-  document.getElementById('listingsCount').textContent = 'Loading...';
-}
 
 function loadListings() {
   const q = collection(db, 'properties');
@@ -1137,9 +1174,11 @@ function loadListings() {
   onSnapshot(q, apply, (error) => {
     console.error('Firebase error:', error);
     if (!listings.length) {
-      document.getElementById('listingsGrid').innerHTML =
-        `<div class="empty-state"><i class="fas fa-wifi"></i><h3>Slow connection</h3><p>Please refresh the page.</p></div>`;
-      document.getElementById('listingsCount').textContent = '—';
+      ['sale','rent'].forEach(sec => {
+        document.getElementById(sec + 'Grid').innerHTML =
+          `<div class="empty-state"><i class="fas fa-wifi"></i><h3>Slow connection</h3><p>Please refresh the page.</p></div>`;
+        document.getElementById(sec + 'Count').textContent = '—';
+      });
     }
   });
 }
@@ -1161,58 +1200,106 @@ function updateStats() {
   document.getElementById('statToday').textContent = active.filter(l => l.listingType === 'rent').length;
 }
 
-function setChipFilter(type, btn) {
-  activeChipType = type;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+function setChipFilter(sec, type, btn) {
+  sections[sec].type = type;
+  sections[sec].page = 1;
+  document.querySelectorAll('#' + sec + 'Chips .filter-chip').forEach(c => c.classList.remove('active'));
   if (btn) btn.classList.add('active');
-  document.getElementById('heroType').value = type;
+  applyFilters(true);
+}
+
+function setHeroType() {
+  // search-bar type applies to both sections
+  const t = document.getElementById('heroType').value;
+  ['sale','rent'].forEach(sec => {
+    sections[sec].type = t;
+    document.querySelectorAll('#' + sec + 'Chips .filter-chip').forEach(c => {
+      const m = (c.getAttribute('onclick') || '').match(/'(sale|rent)', '([^']*)'/);
+      c.classList.toggle('active', !!m && m[2] === t);
+    });
+  });
   applyFilters();
 }
 
-function applyFilters() {
+function applyFilters(keepPage) {
   const search = (document.getElementById('heroSearch').value || '').toLowerCase();
-  const type = document.getElementById('heroType').value || activeChipType;
-  const deal = document.getElementById('dealSelect').value;
   const maxPrice = parseFloat(document.getElementById('heroPrice').value) || Infinity;
   const sort = document.getElementById('sortSelect').value;
   const isTotal = l => ['L','Cr','auto'].includes(l.priceUnit) && l.price > 0;
-
-  filtered = listings.filter(l => {
-    if (l.sold) return false;  // hide sold properties from customers
-    const hay = [l.title, l.location, l.city, l.id, l.size, l.details].join(' ').toLowerCase();
-    const matchSearch = !search || hay.includes(search);
-    const matchType = !type || l.type === type;
-    const matchDeal = !deal || l.listingType === deal;
-    const matchPrice = maxPrice === Infinity || (isTotal(l) && l.price <= maxPrice);
-    return matchSearch && matchType && matchDeal && matchPrice;
-  });
-
   const pv = l => isTotal(l) ? l.price : 0;
-  switch(sort) {
-    case 'newest': filtered.sort((a,b) => b._sort - a._sort); break;
-    case 'oldest': filtered.sort((a,b) => a._sort - b._sort); break;
-    case 'price-low': filtered.sort((a,b) => (pv(a)||Infinity) - (pv(b)||Infinity)); break;
-    case 'price-high': filtered.sort((a,b) => pv(b) - pv(a)); break;
-    case 'area': filtered.sort((a,b) => (parseFloat(String(b.size).replace(/,/g,''))||0) - (parseFloat(String(a.size).replace(/,/g,''))||0)); break;
+  const sorter = {
+    newest: (a,b) => b._sort - a._sort,
+    oldest: (a,b) => a._sort - b._sort,
+    'price-low': (a,b) => (pv(a)||Infinity) - (pv(b)||Infinity),
+    'price-high': (a,b) => pv(b) - pv(a),
+    area: (a,b) => (parseFloat(String(b.size).replace(/,/g,''))||0) - (parseFloat(String(a.size).replace(/,/g,''))||0)
+  }[sort] || ((a,b) => b._sort - a._sort);
+
+  ['sale','rent'].forEach(sec => {
+    const st = sections[sec];
+    st.items = listings.filter(l => {
+      if (l.sold) return false;  // hide sold properties from customers
+      if ((l.listingType === 'rent' ? 'rent' : 'sale') !== sec) return false;
+      const hay = [l.title, l.location, l.city, l.id, l.size, l.details].join(' ').toLowerCase();
+      const matchSearch = !search || hay.includes(search);
+      const matchType = !st.type || l.type === st.type;
+      const matchPrice = maxPrice === Infinity || sec === 'rent' || (isTotal(l) && l.price <= maxPrice);
+      return matchSearch && matchType && matchPrice;
+    }).sort(sorter);
+    if (keepPage !== true) st.page = 1;
+    renderSection(sec);
+  });
+}
+
+function goPage(sec, page) {
+  sections[sec].page = page;
+  renderSection(sec);
+  const el = document.getElementById(sec === 'sale' ? 'listings' : 'rent');
+  if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 10, behavior: 'smooth' });
+}
+
+function renderPager(sec, total) {
+  const st = sections[sec];
+  const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const pager = document.getElementById(sec + 'Pager');
+  const info = document.getElementById(sec + 'PagerInfo');
+  if (pages <= 1) { pager.innerHTML = ''; info.textContent = ''; return; }
+  const p = st.page;
+  const nums = [];
+  for (let i = 1; i <= pages; i++) {
+    if (i === 1 || i === pages || Math.abs(i - p) <= 1) nums.push(i);
+    else if (nums[nums.length - 1] !== '…') nums.push('…');
   }
-  renderListings();
+  pager.innerHTML =
+    `<button ${p === 1 ? 'disabled' : ''} onclick="goPage('${sec}', ${p - 1})" aria-label="Previous page">«</button>` +
+    nums.map(n => n === '…' ? `<span class="pager-gap">…</span>`
+      : `<button class="${n === p ? 'active' : ''}" onclick="goPage('${sec}', ${n})">${n}</button>`).join('') +
+    `<button ${p === pages ? 'disabled' : ''} onclick="goPage('${sec}', ${p + 1})" aria-label="Next page">»</button>`;
+  const from = (p - 1) * PAGE_SIZE + 1, to = Math.min(p * PAGE_SIZE, total);
+  info.textContent = `Showing ${from}–${to} of ${total}`;
 }
 
 function formatPrice(l) { return srFormatPrice(l); }
 
-function renderListings() {
-  const grid = document.getElementById('listingsGrid');
-  document.getElementById('listingsCount').textContent = filtered.length + ' propert' + (filtered.length === 1 ? 'y' : 'ies');
-  if (!filtered.length) {
+function renderSection(sec) {
+  const st = sections[sec];
+  const all = st.items;
+  const pages = Math.max(1, Math.ceil(all.length / PAGE_SIZE));
+  if (st.page > pages) st.page = pages;
+  const grid = document.getElementById(sec + 'Grid');
+  document.getElementById(sec + 'Count').textContent = all.length + ' propert' + (all.length === 1 ? 'y' : 'ies');
+  renderPager(sec, all.length);
+  if (!all.length) {
     grid.innerHTML = `<div class="empty-state"><i class="fas fa-seedling"></i><h3>No properties found</h3><p>Try adjusting your search or filters</p></div>`;
     return;
   }
-  grid.innerHTML = filtered.map((l, idx) => {
+  const pageItems = all.slice((st.page - 1) * PAGE_SIZE, st.page * PAGE_SIZE);
+  grid.innerHTML = pageItems.map((l, idx) => {
     const img = l.images[0] ? srImg(l.images[0], 640) : 'https://via.placeholder.com/400x220/0B1533/ffffff?text=No+Image';
     const price = formatPrice(l);
     const postedDate = l._added ? l._added.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}) : '';
     return `
-    <div class="property-card card-enter" onclick="openDetail('${l.id}')" style="animation-delay:${idx*60}ms">
+    <div class="property-card card-enter" onclick="openDetail('${l.id}')" style="animation-delay:${idx*40}ms">
       <div class="card-img-wrap">
         <img src="${img}" alt="${l.title}" loading="lazy">
         <div class="card-badge">${l.listingType === 'rent' ? 'For Rent' : 'For Sale'} · ${l.type}</div>
@@ -1225,9 +1312,9 @@ function renderListings() {
           ${postedDate ? `<div style="font-size:0.72rem;color:var(--muted);display:flex;align-items:center;gap:0.25rem"><i class="fas fa-calendar-alt" style="color:var(--sage);font-size:0.68rem"></i>${postedDate}</div>` : ''}
         </div>
         <div class="card-title">${l.title}</div>
-        <div class="card-loc"><i class="fas fa-map-marker-alt"></i>${l.location||'Chennai'}${l.city ? ', '+l.city : ''}${srYoutubeId(l.videoUrl) ? ' <span style="margin-left:auto;color:#FF0000;font-size:0.75rem;font-weight:700"><i class="fab fa-youtube"></i> Video</span>' : ''}</div>
+        <div class="card-loc"><i class="fas fa-map-marker-alt"></i><span class="card-loc-text" title="${l.location||'Chennai'}">${l.location||'Chennai'}${l.city ? ', '+l.city : ''}</span>${srYoutubeId(l.videoUrl) ? ' <span style="flex-shrink:0;color:#FF0000;font-size:0.75rem;font-weight:700"><i class="fab fa-youtube"></i> Video</span>' : ''}</div>
         <div class="card-specs">
-          <div class="spec-item"><i class="fas fa-ruler-combined"></i> ${l.size||'N/A'}</div>
+          <div class="spec-item" style="grid-column:1/-1"><i class="fas fa-ruler-combined"></i> <span class="spec-text">${l.size||'N/A'}</span></div>
           ${l.facing ? `<div class="spec-item"><i class="fas fa-compass"></i> ${l.facing}</div>` : ''}
           ${l.dimensions ? `<div class="spec-item"><i class="fas fa-vector-square"></i> ${l.dimensions}</div>` : ''}
           ${(l.type === 'Apartments' && l.floorNumber) ? `<div class="spec-item"><i class="fas fa-building"></i> Floor : ${l.floorNumber}</div>` : ''}
@@ -1236,7 +1323,7 @@ function renderListings() {
           ${l.owner ? `<div class="spec-item"><i class="fas fa-user"></i> ${l.owner}</div>` : ''}
         </div>
         <div class="card-footer">
-          <div>
+          <div class="card-price-block">
             <div class="card-price">${price}</div>
             ${(l.listingType === 'sale' && l.priceUnit !== 'request') ? `<div style="font-size:0.72rem;color:var(--sage);font-weight:600;margin-top:0.2rem;letter-spacing:0.3px">Price Negotiable</div>` : ''}
           </div>
@@ -1469,7 +1556,8 @@ function checkUrlParam() {
   if (detailOpenedFromUrl) return;
   const p = new URLSearchParams(location.search).get('property');
   if (!p) return;
-  const found = listings.find(x => x.id === p || x.firestoreId === p || x.id === 'SR' + p);
+  const num = (String(p).match(/(\d+)$/) || [])[1];
+  const found = listings.find(x => x.id === p || x.firestoreId === p) || (num && listings.find(x => x.firestoreId === num || x.id === 'ID-' + num));
   if (found) {
     detailOpenedFromUrl = true;
     openDetail(found.id);
@@ -1478,6 +1566,7 @@ function checkUrlParam() {
 
 window.applyFilters         = applyFilters;
 window.setChipFilter        = setChipFilter;
+window.goPage               = goPage;
 window.openDetail           = openDetail;
 window.closeDetail          = closeDetail;
 window.closeDetailOnOverlay = closeDetailOnOverlay;
@@ -1497,12 +1586,11 @@ setTimeout(function(){
 
 // ===== WIRE UP FILTER EVENTS INSIDE MODULE (no timing race) =====
 document.getElementById('heroSearch').addEventListener('input',  applyFilters);
-document.getElementById('heroType').addEventListener('change',   applyFilters);
-document.getElementById('dealSelect').addEventListener('change', applyFilters);
+document.getElementById('heroType').addEventListener('change',   setHeroType);
 document.getElementById('heroPrice').addEventListener('input',   applyFilters);
 document.getElementById('sortSelect').addEventListener('change', applyFilters);
 const btnSearch = document.getElementById('btnSearch');
-if(btnSearch) btnSearch.addEventListener('click', applyFilters);
+if(btnSearch) btnSearch.addEventListener('click', () => { applyFilters(); document.getElementById('listings').scrollIntoView({behavior:'smooth'}); });
 
 loadListings();
 loadStaff();
