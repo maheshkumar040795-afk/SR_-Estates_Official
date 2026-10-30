@@ -25,21 +25,21 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --forest:#174A8B;
-  --forest-mid:#123B70;
-  --forest-light:#2A63A8;
-  --sage:#D45A12;
+  --forest:#1D4ED8;
+  --forest-mid:#1E3A8A;
+  --forest-light:#3B82F6;
+  --sage:#0F766E;
   --mint:#EEF3F9;
-  --gold:#FF762E;
-  --gold-light:#FFA36B;
+  --gold:#14B8A6;
+  --gold-light:#5EEAD4;
   --cream:#FFFFFF;
   --white:#FFFFFF;
   --smoke:#F5F7FB;
   --text:#1E293B;
-  --muted:#36454F;
+  --muted:#475569;
   --border:#E2E8F0;
   --card-shadow:0 4px 24px rgba(15,23,42,0.10);
-  --card-shadow-hover:0 12px 40px rgba(23,74,139,0.22);
+  --card-shadow-hover:0 12px 40px rgba(29,78,216,0.22);
 }
 body{font-family:'DM Sans',sans-serif;background:var(--smoke);color:var(--text);min-height:100vh}
 
@@ -53,29 +53,29 @@ body{font-family:'DM Sans',sans-serif;background:var(--smoke);color:var(--text);
 }
 
 /* ===== NAV (shared) ===== */
-.about-hero{position:relative;background:linear-gradient(135deg,#174A8B 0%,#0E2F57 55%,#123B70 100%);padding-bottom:5rem}
-.about-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 15% 20%,rgba(255,118,46,0.10),transparent 45%),radial-gradient(circle at 85% 10%,rgba(134,166,212,0.16),transparent 40%);pointer-events:none}
-.cinematic-nav{position:relative;z-index:50;padding:0.6rem 2rem;max-width:80rem;margin:0 auto;display:flex;justify-content:space-between;align-items:center;background:rgba(14,47,87,0.38);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-radius:0 0 20px 20px}
+.about-hero{position:relative;background:linear-gradient(135deg,#1D4ED8 0%,#0B1F3A 55%,#1E3A8A 100%);padding-bottom:5rem}
+.about-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 15% 20%,rgba(20,184,166,0.10),transparent 45%),radial-gradient(circle at 85% 10%,rgba(134,166,212,0.16),transparent 40%);pointer-events:none}
+.cinematic-nav{position:relative;z-index:50;padding:0.6rem 2rem;max-width:80rem;margin:0 auto;display:flex;justify-content:space-between;align-items:center;background:rgba(11,31,58,0.38);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-radius:0 0 20px 20px}
 .cinematic-logo{display:flex;align-items:center;gap:0.75rem;text-decoration:none;line-height:1}
-.cinematic-logo-img{width:54px;height:54px;border-radius:14px;background:radial-gradient(circle at 35% 30%,rgba(232,239,252,0.22),rgba(14,47,87,0.4));box-shadow:0 3px 10px rgba(0,0,0,0.45),0 0 0 2.5px #FF762E,0 0 0 3.5px rgba(14,47,87,0.55),inset 0 0 7px rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.cinematic-logo-img{width:54px;height:54px;border-radius:14px;background:radial-gradient(circle at 35% 30%,rgba(232,239,252,0.22),rgba(11,31,58,0.4));box-shadow:0 3px 10px rgba(0,0,0,0.45),0 0 0 2.5px #14B8A6,0 0 0 3.5px rgba(11,31,58,0.55),inset 0 0 7px rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
 .cinematic-logo-img img{width:100%;height:100%;object-fit:contain;object-position:center;border-radius:10px}
 .cinematic-logo-text{display:flex;flex-direction:column;gap:0.05rem}
 .cinematic-logo-name{font-family:'Playfair Display',serif;font-size:1.32rem;font-weight:700;letter-spacing:0.3px;line-height:1.1;white-space:nowrap}
 .cinematic-logo-name .nizhal{color:#EEF3F9}
-.cinematic-logo-name .promoters{color:#FF762E}
+.cinematic-logo-name .promoters{color:#14B8A6}
 .cinematic-logo-sub{font-size:0.75rem;color:rgba(255,255,255,0.65);letter-spacing:1.5px;text-transform:uppercase;font-family:'DM Sans',sans-serif;font-weight:500}
 .cinematic-nav-links{display:flex;align-items:center;gap:0.25rem}
 .cinematic-nav-link{font-family:'Inter',sans-serif;font-size:0.875rem;font-weight:400;color:rgba(255,255,255,0.8);text-decoration:none;padding:0.4rem 0.75rem;border-radius:6px;transition:color 0.2s}
-.cinematic-nav-link.active{color:#FF762E}
-.cinematic-nav-link:hover{color:#FF762E}
-.cinematic-nav-cta{font-family:'Inter',sans-serif;font-size:0.875rem;font-weight:500;background:linear-gradient(135deg,#FF762E,#FFA36B);color:#FFFFFF;border:none;padding:0.625rem 1.5rem;border-radius:9999px;cursor:pointer;text-decoration:none;transition:transform 0.2s;display:inline-block;margin-left:0.5rem}
+.cinematic-nav-link.active{color:#14B8A6}
+.cinematic-nav-link:hover{color:#14B8A6}
+.cinematic-nav-cta{font-family:'Inter',sans-serif;font-size:0.875rem;font-weight:500;background:linear-gradient(135deg,#14B8A6,#5EEAD4);color:#FFFFFF;border:none;padding:0.625rem 1.5rem;border-radius:9999px;cursor:pointer;text-decoration:none;transition:transform 0.2s;display:inline-block;margin-left:0.5rem}
 .cinematic-nav-cta:hover{transform:scale(1.03)}
 .nav-hamburger{display:none;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:1.15rem;width:42px;height:42px;border-radius:10px;cursor:pointer;align-items:center;justify-content:center;flex-shrink:0}
 
 .about-hero-body{position:relative;z-index:10;max-width:64rem;margin:0 auto;padding:4.5rem 1.5rem 0;text-align:center}
-.about-eyebrow{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(255,118,46,0.14);border:1px solid rgba(255,118,46,0.35);color:#FF762E;border-radius:20px;padding:0.35rem 1rem;font-size:0.78rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1.5rem}
+.about-eyebrow{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(20,184,166,0.14);border:1px solid rgba(20,184,166,0.35);color:#14B8A6;border-radius:20px;padding:0.35rem 1rem;font-size:0.78rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1.5rem}
 .about-headline{font-family:'Instrument Serif',serif;font-size:clamp(2.3rem,6vw,4rem);font-weight:400;line-height:1.05;letter-spacing:-1.5px;color:#fff;text-shadow:0 2px 24px rgba(0,0,0,0.35)}
-.about-headline span{color:#FF762E;font-style:normal}
+.about-headline span{color:#14B8A6;font-style:normal}
 .about-sub{font-family:'Inter',sans-serif;font-size:1.05rem;line-height:1.75;color:rgba(255,255,255,0.82);max-width:38rem;margin:1.5rem auto 0}
 
 /* ===== CONTACT CARDS ===== */
@@ -126,11 +126,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--smoke);color:var(--text);
 footer{background:var(--forest);padding:3rem 2rem 1.5rem;margin-top:5rem}
 .footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem;margin-bottom:2rem}
 .logo{display:flex;align-items:center;gap:0.85rem}
-.logo-img{width:72px;height:72px;border-radius:16px;background:radial-gradient(circle at 35% 30%,rgba(232,239,252,0.2),rgba(14,47,87,0.38));display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,0.4),0 0 0 2.5px #FF762E,0 0 0 3.75px rgba(14,47,87,0.5),inset 0 0 8px rgba(0,0,0,0.3);padding:5px}
+.logo-img{width:72px;height:72px;border-radius:16px;background:radial-gradient(circle at 35% 30%,rgba(232,239,252,0.2),rgba(11,31,58,0.38));display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,0.4),0 0 0 2.5px #14B8A6,0 0 0 3.75px rgba(11,31,58,0.5),inset 0 0 8px rgba(0,0,0,0.3);padding:5px}
 .logo-img img{width:100%;height:100%;object-fit:contain;object-position:center;border-radius:12px}
 .logo-name{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--white);letter-spacing:0.5px}
 .footer-brand p{color:rgba(255,255,255,0.5);font-size:0.88rem;line-height:1.7;margin-top:0.75rem}
-.footer-title{color:#FF762E;font-size:0.85rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
+.footer-title{color:#14B8A6;font-size:0.85rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
 .footer-links{list-style:none}
 .footer-links li{margin-bottom:0.5rem}
 .footer-links a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.88rem;transition:color 0.2s}
@@ -139,7 +139,7 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem;margin-top:5rem}
 .footer-contact i{color:var(--sage);margin-right:0.5rem}
 .footer-copy{color:rgba(255,255,255,0.35);font-size:0.82rem}
 .footer-admin-link{color:rgba(255,255,255,0.4);font-size:0.82rem;text-decoration:none;padding:0.3rem 0.8rem;border:1px solid rgba(255,255,255,0.15);border-radius:6px;transition:all 0.2s}
-.footer-admin-link:hover{color:#FF762E;border-color:#FF762E}
+.footer-admin-link:hover{color:#14B8A6;border-color:#14B8A6}
 
 /* ===== FLOATING ACTION BUTTONS (shared) ===== */
 .fab-container{position:fixed;bottom:1.75rem;left:1.25rem;z-index:9000;display:flex;flex-direction:column-reverse;align-items:flex-start;gap:0.7rem}
@@ -147,15 +147,15 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem;margin-top:5rem}
 .fab-item:hover{transform:scale(1.12);box-shadow:0 8px 22px rgba(0,0,0,0.45)}
 .fab-call{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--forest);width:56px;height:56px;font-size:1.5rem;order:5}
 .fab-whatsapp{background:#25D366;animation-delay:0.05s}
-.fab-instagram{background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#D9560F 90%);animation-delay:0.15s}
+.fab-instagram{background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#0F766E 90%);animation-delay:0.15s}
 .fab-item.fab-instagram{border:none;font:inherit;padding:0;cursor:pointer;outline:none}
 .fab-insta-wrap{position:relative}
-.insta-chooser{display:none;position:absolute;left:0;bottom:calc(100% + 0.6rem);background:rgba(14,47,87,0.97);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,118,46,0.35);border-radius:14px;padding:0.6rem;min-width:210px;box-shadow:0 14px 34px rgba(0,0,0,0.45);z-index:9500}
+.insta-chooser{display:none;position:absolute;left:0;bottom:calc(100% + 0.6rem);background:rgba(11,31,58,0.97);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(20,184,166,0.35);border-radius:14px;padding:0.6rem;min-width:210px;box-shadow:0 14px 34px rgba(0,0,0,0.45);z-index:9500}
 .insta-chooser.open{display:block}
-.insta-chooser-title{color:#FF762E;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;padding:0.2rem 0.5rem 0.5rem;font-family:'DM Sans',sans-serif}
+.insta-chooser-title{color:#14B8A6;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;padding:0.2rem 0.5rem 0.5rem;font-family:'DM Sans',sans-serif}
 .insta-chooser-item{display:flex;align-items:center;gap:0.6rem;padding:0.55rem 0.6rem;border-radius:9px;color:#fff;text-decoration:none;font-size:0.85rem;font-family:'DM Sans',sans-serif;transition:background 0.15s}
 .insta-chooser-item:hover{background:rgba(255,255,255,0.08)}
-.insta-chooser-item i{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.85rem;color:#fff;background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#D9560F 90%)}
+.insta-chooser-item i{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.85rem;color:#fff;background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#0F766E 90%)}
 @keyframes fabIn{to{opacity:1;transform:translateY(0) scale(1)}}
 
 @media(max-width:768px){
@@ -163,7 +163,7 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem;margin-top:5rem}
   .cinematic-logo-name{font-size:1.02rem;white-space:normal}
   .cinematic-logo-sub{font-size:0.62rem}
   .nav-hamburger{display:flex}
-  .cinematic-nav-links{display:none;position:absolute;top:100%;left:0.75rem;right:0.75rem;flex-direction:column;align-items:stretch;gap:0.35rem;background:rgba(14,47,87,0.96);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);padding:1rem 1rem 1.15rem;border-radius:16px;box-shadow:0 16px 34px rgba(0,0,0,0.45);margin-top:0.6rem;z-index:30}
+  .cinematic-nav-links{display:none;position:absolute;top:100%;left:0.75rem;right:0.75rem;flex-direction:column;align-items:stretch;gap:0.35rem;background:rgba(11,31,58,0.96);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);padding:1rem 1rem 1.15rem;border-radius:16px;box-shadow:0 16px 34px rgba(0,0,0,0.45);margin-top:0.6rem;z-index:30}
   .cinematic-nav-links.open{display:flex}
   .cinematic-nav-link{width:100%;text-align:center;padding:0.65rem 0.75rem;border-radius:8px}
   .cinematic-nav-link:hover,.cinematic-nav-link.active{background:rgba(255,255,255,0.08)}
@@ -178,9 +178,21 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem;margin-top:5rem}
 .cinematic-logo-img img,.logo-img img,.login-badge img,.admin-badge img{border-radius:0!important;object-fit:contain!important;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.25))}
 
 /* ── Glitter Blue + Orange: dark text on orange buttons, deeper orange for small text on white ── */
-.cinematic-nav-cta,.cinematic-cta,.about-cta-btn,.directions-btn,.btn-login,.btn-save,.btn-add:not([style]){color:#0E2F57!important}
-.cinematic-nav-cta:hover,.cinematic-cta:hover,.about-cta-btn:hover{color:#0E2F57!important}
-.sec-eyebrow,.about-section-eyebrow,.areas-served-eyebrow,.founder-story-role,.person-role{color:#D45A12!important}
+.cinematic-nav-cta,.cinematic-cta,.about-cta-btn,.directions-btn,.btn-login,.btn-save,.btn-add:not([style]){color:#0B1F3A!important}
+.cinematic-nav-cta:hover,.cinematic-cta:hover,.about-cta-btn:hover{color:#0B1F3A!important}
+.sec-eyebrow,.about-section-eyebrow,.areas-served-eyebrow,.founder-story-role,.person-role{color:#0F766E!important}
+
+/* floating buttons on the right + Google review */
+.fab-container{left:auto!important;right:1.25rem;align-items:flex-end!important}
+.fab-insta-wrap .insta-chooser{left:auto!important;right:0!important}
+.fab-google{background:#fff!important;color:#4285F4!important;border:1px solid #E2E8F0;font-size:1.35rem!important}
+.fab-google:hover{box-shadow:0 8px 24px rgba(66,133,244,0.35)!important}
+.fab-google .fab-tip{position:absolute;right:calc(100% + 10px);top:50%;transform:translateY(-50%);background:#0B1F3A;color:#fff;font-size:0.75rem;font-weight:600;white-space:nowrap;padding:0.3rem 0.6rem;border-radius:6px;opacity:0;pointer-events:none;transition:opacity 0.2s;font-family:'DM Sans',sans-serif}
+.fab-google:hover .fab-tip{opacity:1}
+.fab-google{position:relative}
+@media(max-width:768px){.fab-container{right:0.85rem}}
+/* hero contact badge moves to the left so it doesn't sit under the floating buttons */
+@media(min-width:769px){.founder-badge{right:auto!important;left:2rem!important}}
 </style>
 </head>
 <body>
@@ -190,7 +202,7 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem;margin-top:5rem}
   <nav class="cinematic-nav">
     <a href="index.html" class="cinematic-logo">
       <div class="cinematic-logo-img">
-        <img src="logo.png" alt="SR Estates Logo" onerror="this.parentElement.innerHTML='<span style=\'font-family:Playfair Display,serif;font-weight:900;color:#174A8B;font-size:1.1rem\'>SR</span>'">
+        <img src="logo.png" alt="SR Estates Logo" onerror="this.parentElement.innerHTML='<span style=\'font-family:Playfair Display,serif;font-weight:900;color:#1D4ED8;font-size:1.1rem\'>SR</span>'">
       </div>
       <div class="cinematic-logo-text">
         <div class="cinematic-logo-name"><span class="nizhal">SR</span> <span class="promoters">ESTATES</span></div>
@@ -221,7 +233,7 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem;margin-top:5rem}
 <!-- CONTACT CARDS -->
 <div class="contact-cards-wrap">
   <div class="person-card reveal">
-    <div class="person-avatar"><img src="rakesh.png" alt="Mr. R. Rakesh — SR Estates" loading="lazy" onerror="var p=this.parentElement;p.style.display='flex';p.style.alignItems='center';p.style.justifyContent='center';p.innerHTML='<i class=\'fas fa-user-tie\' style=\'font-size:2rem;color:#FF8A4C\'></i>'"></div>
+    <div class="person-avatar"><img src="rakesh.png" alt="Mr. R. Rakesh — SR Estates" loading="lazy" onerror="var p=this.parentElement;p.style.display='flex';p.style.alignItems='center';p.style.justifyContent='center';p.innerHTML='<i class=\'fas fa-user-tie\' style=\'font-size:2rem;color:#2DD4BF\'></i>'"></div>
     <div class="person-role">Contact Person</div>
     <div class="person-name">Mr. R. Rakesh</div>
     <div class="person-actions">
@@ -230,7 +242,7 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem;margin-top:5rem}
     </div>
   </div>
   <div class="person-card reveal">
-    <div class="person-avatar" style="display:flex;align-items:center;justify-content:center"><i class="fas fa-building" style="font-size:2rem;color:#FF8A4C"></i></div>
+    <div class="person-avatar" style="display:flex;align-items:center;justify-content:center"><i class="fas fa-building" style="font-size:2rem;color:#2DD4BF"></i></div>
     <div class="person-role">Office</div>
     <div class="person-name">SR Estates</div>
     <div class="person-actions">
@@ -329,6 +341,9 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem;margin-top:5rem}
         <a href="https://twitter.com/srestates_sr" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.88rem;display:flex;align-items:center;gap:0.5rem;transition:color 0.2s" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">
           <i class="fab fa-x-twitter" style="width:18px"></i> X (Twitter)
         </a>
+        <a href="https://share.google/8GnwM5JiUPGzglwR6" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.88rem;display:flex;align-items:center;gap:0.5rem;transition:color 0.2s" onmouseover="this.style.color='#FBBC05'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">
+          <i class="fab fa-google" style="width:18px"></i> Rate us on Google
+        </a>
       </div>
     </div>
   </div>
@@ -340,6 +355,7 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem;margin-top:5rem}
 
 <!-- FLOATING ACTION BUTTONS -->
 <div class="fab-container">
+  <a class="fab-item fab-google" href="https://share.google/8GnwM5JiUPGzglwR6" target="_blank" rel="noopener" title="Rate us on Google" aria-label="Write a Google review"><i class="fab fa-google"></i><span class="fab-tip">★ Rate us on Google</span></a>
   <a class="fab-item fab-call" href="tel:+919841436766" title="Call Now"><i class="fas fa-phone"></i></a>
   <a class="fab-item fab-whatsapp" href="https://wa.me/919841436766?text=Hello%20SR%20Estates%2C%20I%20would%20like%20to%20enquire%20about%20your%20properties." target="_blank" rel="noopener" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
   <div class="fab-insta-wrap">
