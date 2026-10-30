@@ -25,20 +25,24 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
+  --surface:#111B2E;
+  --surface-2:#16233A;
+  --page:#0B1220;
+  --heading:#7DB4FF;
   --forest:#1D4ED8;
   --forest-mid:#1E3A8A;
   --forest-light:#3B82F6;
-  --sage:#0F766E;
-  --mint:#EEF3F9;
+  --sage:#2DD4BF;
+  --mint:#16233A;
   --gold:#14B8A6;
   --gold-light:#5EEAD4;
-  --cream:#FFFFFF;
+  --cream:#0B1220;
   --white:#FFFFFF;
-  --smoke:#F5F7FB;
-  --text:#1E293B;
-  --muted:#475569;
-  --border:#E2E8F0;
-  --card-shadow:0 4px 24px rgba(15,23,42,0.10);
+  --smoke:#0B1220;
+  --text:#E2E8F0;
+  --muted:#94A3B8;
+  --border:#22314D;
+  --card-shadow:0 6px 24px rgba(0,0,0,0.35);
   --card-shadow-hover:0 12px 40px rgba(29,78,216,0.22);
 }
 body{font-family:'DM Sans',sans-serif;background:var(--smoke);color:var(--text);min-height:100vh}
@@ -61,7 +65,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--smoke);color:var(--text);
 .cinematic-logo-img img{width:100%;height:100%;object-fit:contain;object-position:center;border-radius:10px}
 .cinematic-logo-text{display:flex;flex-direction:column;gap:0.05rem}
 .cinematic-logo-name{font-family:'Playfair Display',serif;font-size:1.32rem;font-weight:700;letter-spacing:0.3px;line-height:1.1;white-space:nowrap}
-.cinematic-logo-name .nizhal{color:#EEF3F9}
+.cinematic-logo-name .nizhal{color:var(--mint)}
 .cinematic-logo-name .promoters{color:#14B8A6}
 .cinematic-logo-sub{font-size:0.75rem;color:rgba(255,255,255,0.65);letter-spacing:1.5px;text-transform:uppercase;font-family:'DM Sans',sans-serif;font-weight:500}
 .cinematic-nav-links{display:flex;align-items:center;gap:0.25rem}
@@ -81,14 +85,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--smoke);color:var(--text);
 /* ===== CONTACT CARDS ===== */
 .contact-cards-wrap{max-width:1100px;margin:-3.5rem auto 0;padding:0 1.5rem;position:relative;z-index:20;display:grid;grid-template-columns:1fr 1fr;gap:1.75rem}
 @media(max-width:768px){.contact-cards-wrap{grid-template-columns:1fr}}
-.person-card{background:#fff;border-radius:24px;box-shadow:0 20px 60px rgba(15,23,42,0.18);padding:2rem;text-align:center}
+.person-card{background:var(--surface);border-radius:24px;box-shadow:0 20px 60px rgba(15,23,42,0.18);padding:2rem;text-align:center}
 .person-avatar{width:110px;height:110px;border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 35% 30%,#2a2210,#0d0d0d);box-shadow:0 0 0 5px var(--mint),0 0 0 6px var(--border);overflow:hidden}
 .person-avatar img{width:100%;height:100%;object-fit:cover;object-position:center 20%}
 .person-role{color:var(--sage);font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.3rem}
-.person-name{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--forest);margin-bottom:1rem}
+.person-name{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--heading);margin-bottom:1rem}
 .person-actions{display:flex;gap:0.6rem;justify-content:center;flex-wrap:wrap}
 .person-btn{display:inline-flex;align-items:center;gap:0.5rem;text-decoration:none;font-weight:600;font-size:0.88rem;padding:0.6rem 1.15rem;border-radius:20px;transition:all 0.2s}
-.person-btn.call{background:var(--mint);color:var(--forest-mid)}
+.person-btn.call{background:var(--mint);color:var(--heading)}
 .person-btn.call:hover{background:var(--forest-mid);color:#fff}
 .person-btn.wa{background:#25D366;color:#fff}
 .person-btn.wa:hover{filter:brightness(0.92)}
@@ -97,25 +101,25 @@ body{font-family:'DM Sans',sans-serif;background:var(--smoke);color:var(--text);
 /* ===== SECTION TITLES (shared) ===== */
 .about-section{max-width:1100px;margin:5rem auto 0;padding:0 1.5rem}
 .about-section-eyebrow{color:var(--sage);font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;text-align:center;margin-bottom:0.6rem}
-.about-section-title{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,3.5vw,2.4rem);color:var(--forest);text-align:center;margin-bottom:0.75rem}
+.about-section-title{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,3.5vw,2.4rem);color:var(--heading);text-align:center;margin-bottom:0.75rem}
 .about-section-desc{color:var(--muted);text-align:center;max-width:40rem;margin:0 auto 2.5rem;line-height:1.75;font-size:0.98rem}
 
 /* ===== MAP + OFFICE ===== */
-.map-wrap{max-width:1100px;margin:0 auto;background:#fff;border:1px solid var(--border);border-radius:24px;box-shadow:var(--card-shadow);overflow:hidden;display:grid;grid-template-columns:1.1fr 0.9fr}
+.map-wrap{max-width:1100px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:24px;box-shadow:var(--card-shadow);overflow:hidden;display:grid;grid-template-columns:1.1fr 0.9fr}
 @media(max-width:800px){.map-wrap{grid-template-columns:1fr}}
 .map-embed{width:100%;height:100%;min-height:340px;border:0;display:block}
 .map-info{padding:2.25rem 2rem;display:flex;flex-direction:column;justify-content:center;gap:1rem}
-.map-info-title{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--forest);font-weight:700}
+.map-info-title{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--heading);font-weight:700}
 .map-info-row{display:flex;align-items:flex-start;gap:0.75rem;color:var(--muted);font-size:0.94rem;line-height:1.6}
 .map-info-row i{color:var(--sage);margin-top:0.2rem;width:18px}
-.directions-btn{display:inline-flex;align-items:center;gap:0.6rem;justify-content:center;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--forest);font-weight:700;padding:0.85rem 1.5rem;border-radius:9999px;text-decoration:none;margin-top:0.5rem;transition:transform 0.2s}
+.directions-btn{display:inline-flex;align-items:center;gap:0.6rem;justify-content:center;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--heading);font-weight:700;padding:0.85rem 1.5rem;border-radius:9999px;text-decoration:none;margin-top:0.5rem;transition:transform 0.2s}
 .directions-btn:hover{transform:scale(1.03)}
 
 /* ===== ENQUIRY FORM ===== */
-.enquiry-wrap{max-width:700px;margin:0 auto;background:#fff;border:1px solid var(--border);border-radius:24px;box-shadow:var(--card-shadow);padding:2.5rem}
+.enquiry-wrap{max-width:700px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:24px;box-shadow:var(--card-shadow);padding:2.5rem}
 @media(max-width:600px){.enquiry-wrap{padding:1.75rem 1.25rem}}
 .form-group{margin-bottom:1.25rem}
-.form-label{display:block;font-size:0.85rem;font-weight:700;color:var(--forest);margin-bottom:0.4rem}
+.form-label{display:block;font-size:0.85rem;font-weight:700;color:var(--heading);margin-bottom:0.4rem}
 .form-input,.form-textarea{width:100%;padding:0.8rem 1rem;border:1px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.95rem;color:var(--text);background:var(--smoke);transition:border-color 0.2s}
 .form-input:focus,.form-textarea:focus{outline:none;border-color:var(--sage)}
 .form-textarea{resize:vertical;min-height:110px}
@@ -145,7 +149,7 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem;margin-top:5rem}
 .fab-container{position:fixed;bottom:1.75rem;left:1.25rem;z-index:9000;display:flex;flex-direction:column-reverse;align-items:flex-start;gap:0.7rem}
 .fab-item{display:flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:50%;color:#fff;font-size:1.3rem;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,0.35);transition:transform 0.25s ease,box-shadow 0.25s ease;opacity:0;transform:translateY(15px) scale(0.6);animation:fabIn 0.4s ease forwards;will-change:opacity,transform}
 .fab-item:hover{transform:scale(1.12);box-shadow:0 8px 22px rgba(0,0,0,0.45)}
-.fab-call{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--forest);width:56px;height:56px;font-size:1.5rem;order:5}
+.fab-call{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--heading);width:56px;height:56px;font-size:1.5rem;order:5}
 .fab-whatsapp{background:#25D366;animation-delay:0.05s}
 .fab-instagram{background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#0F766E 90%);animation-delay:0.15s}
 .fab-item.fab-instagram{border:none;font:inherit;padding:0;cursor:pointer;outline:none}
@@ -185,7 +189,7 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem;margin-top:5rem}
 /* floating buttons on the right + Google review */
 .fab-container{left:auto!important;right:1.25rem;align-items:flex-end!important}
 .fab-insta-wrap .insta-chooser{left:auto!important;right:0!important}
-.fab-google{background:#fff!important;color:#4285F4!important;border:1px solid #E2E8F0;font-size:1.35rem!important}
+.fab-google{background:#fff!important;color:#4285F4!important;border:1px solid var(--border);font-size:1.35rem!important}
 .fab-google:hover{box-shadow:0 8px 24px rgba(66,133,244,0.35)!important}
 .fab-google .fab-tip{position:absolute;right:calc(100% + 10px);top:50%;transform:translateY(-50%);background:#0B1F3A;color:#fff;font-size:0.75rem;font-weight:600;white-space:nowrap;padding:0.3rem 0.6rem;border-radius:6px;opacity:0;pointer-events:none;transition:opacity 0.2s;font-family:'DM Sans',sans-serif}
 .fab-google:hover .fab-tip{opacity:1}
@@ -193,6 +197,20 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem;margin-top:5rem}
 @media(max-width:768px){.fab-container{right:0.85rem}}
 /* hero contact badge moves to the left so it doesn't sit under the floating buttons */
 @media(min-width:769px){.founder-badge{right:auto!important;left:2rem!important}}
+
+/* ── DARK THEME ── */
+.cinematic-logo-name .nizhal{color:#FFFFFF!important}
+.about-hero{background:linear-gradient(160deg,#0F1E3D 0%,#0B1220 70%)!important;border-bottom:1px solid #1A2640}
+footer{background:#070D18!important;border-top:1px solid #1A2640}
+html,body{background:var(--page)!important;color:var(--text)}
+input,select,textarea{color:var(--text)!important;background-color:var(--surface-2)!important;border-color:var(--border)!important}
+input::placeholder,textarea::placeholder{color:#64748B!important}
+select option{background:#16233A;color:#E2E8F0}
+.property-card,.skeleton-card{box-shadow:0 6px 24px rgba(0,0,0,0.35)!important}
+.property-card:hover{box-shadow:0 14px 40px rgba(0,0,0,0.5),0 0 0 1px rgba(59,130,246,0.35)!important}
+.skeleton-img,.skeleton-line{background:linear-gradient(90deg,#16233A 25%,#1E2D4A 50%,#16233A 75%)!important;background-size:800px 100%!important}
+.modal-overlay{background:rgba(2,6,15,0.78)!important}
+.fab-google{border-color:#22314D!important}
 </style>
 </head>
 <body>
