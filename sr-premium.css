@@ -27,11 +27,6 @@ body::after{content:"";position:fixed;inset:0;z-index:9500;pointer-events:none;o
 /* Scroll progress line */
 .sr-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:9999;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--sr-blue),var(--sr-teal),var(--sr-teal-soft));pointer-events:none}
 
-/* Docked nav: floats as a glass pill after the hero, hides on scroll down, returns on scroll up */
-.cinematic-nav.sr-docked{position:fixed!important;top:12px;left:50%;width:calc(100% - 2rem);max-width:74rem;z-index:9200;border-radius:999px!important;background:rgba(11,31,58,.86)!important;box-shadow:0 18px 40px -12px rgba(11,31,58,.45),inset 0 1px 0 rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);transform:translate(-50%,0);transition:transform .5s var(--sr-ease);animation:srDock .6s var(--sr-ease)}
-.cinematic-nav.sr-docked.sr-hide{transform:translate(-50%,-150%)}
-@keyframes srDock{from{transform:translate(-50%,-150%)}}
-@media(max-width:768px){.cinematic-nav.sr-docked{border-radius:18px!important;width:calc(100% - 1.25rem);top:8px}}
 
 /* Reveal on scroll */
 .sr-js .sr-rv{opacity:0;transform:translateY(26px);transition:opacity .9s var(--sr-ease),transform .9s var(--sr-ease);transition-delay:var(--sr-d,0ms)}
@@ -67,7 +62,6 @@ body::after{content:"";position:fixed;inset:0;z-index:9500;pointer-events:none;o
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   .sr-js .sr-rv{opacity:1;transform:none;transition:none}
-  .sr-marquee-track,.sec-eyebrow::before,.about-section-eyebrow::before,.areas-served-eyebrow::before,.cinematic-nav.sr-docked{animation:none}
-  .cinematic-nav.sr-docked{transition:none}
+  .sr-marquee-track,.sec-eyebrow::before,.about-section-eyebrow::before,.areas-served-eyebrow::before{animation:none}
   .sr-progress{display:none}
 }

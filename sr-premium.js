@@ -13,32 +13,11 @@
     bar.className = 'sr-progress';
     document.body.appendChild(bar);
 
-    /* docked nav */
-    var nav = document.querySelector('.cinematic-nav');
-    var spacer = null, docked = false, lastY = window.scrollY;
+    /* scroll progress only (menu stays at the top, it does not follow the scroll) */
     function onScroll() {
       var y = window.scrollY;
       var max = doc.scrollHeight - innerHeight;
       bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, y / max) : 0) + ')';
-      if (nav) {
-        var menuOpen = document.querySelector('.cinematic-nav-links.open');
-        if (y > 260 && !docked) {
-          spacer = document.createElement('div');
-          spacer.style.height = nav.offsetHeight + 'px';
-          nav.parentNode.insertBefore(spacer, nav);
-          nav.classList.add('sr-docked');
-          docked = true;
-        } else if (y < 120 && docked) {
-          nav.classList.remove('sr-docked', 'sr-hide');
-          if (spacer) spacer.remove();
-          docked = false;
-        }
-        if (docked && !menuOpen) {
-          if (y > lastY + 6 && y > 420) nav.classList.add('sr-hide');
-          else if (y < lastY - 6) nav.classList.remove('sr-hide');
-        }
-      }
-      lastY = y;
     }
     var ticking = false;
     addEventListener('scroll', function () {
