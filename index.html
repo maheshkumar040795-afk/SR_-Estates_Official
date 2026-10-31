@@ -732,6 +732,10 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem}
 @media(max-width:768px){.fab-container{right:0.85rem}}
 /* hero contact badge sits on the right, just left of the floating buttons */
 @media(min-width:769px){.founder-badge{left:auto!important;right:6.25rem!important;bottom:1.75rem!important}}
+
+/* live listing numbers under the banner */
+.listing-stats{max-width:1200px;margin:1.25rem auto 0;border:1px solid var(--border);border-radius:16px;box-shadow:0 6px 20px rgba(15,23,42,0.06);box-sizing:border-box;width:calc(100% - 3rem)}
+@media(max-width:600px){.listing-stats{width:calc(100% - 1.5rem);padding:1rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem}}
 </style>
 <script type="application/ld+json">
 {
@@ -830,12 +834,12 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem}
 
 <!-- ===== STATS STRIP (entry into main content) ===== -->
 
-<!-- STATS STRIP -->
-<div class="stats-strip">
-  <div class="stat-item stat-enter" style="animation-delay:0ms"><div class="stat-num" id="statTotal">0</div><div class="stat-lbl">Listings</div></div>
-  <div class="stat-item stat-enter" style="animation-delay:80ms"><div class="stat-num" id="statLand">0</div><div class="stat-lbl">Plots</div></div>
-  <div class="stat-item stat-enter" style="animation-delay:160ms"><div class="stat-num" id="statHouse">0</div><div class="stat-lbl">Houses &amp; Flats</div></div>
-  <div class="stat-item stat-enter" style="animation-delay:240ms"><div class="stat-num" id="statToday">0</div><div class="stat-lbl">For Rent</div></div>
+<!-- BUSINESS HIGHLIGHTS -->
+<div class="stats-strip biz-stats">
+  <div class="stat-item stat-enter" style="animation-delay:0ms"><div class="stat-num">22+</div><div class="stat-lbl">Years of Business</div></div>
+  <div class="stat-item stat-enter" style="animation-delay:80ms"><div class="stat-num">1200+</div><div class="stat-lbl">Happy Customers</div></div>
+  <div class="stat-item stat-enter" style="animation-delay:160ms"><div class="stat-num">600+</div><div class="stat-lbl">Properties Sold</div></div>
+  <div class="stat-item stat-enter" style="animation-delay:240ms"><div class="stat-num"><i class="fas fa-map-marker-alt" style="font-size:0.8em;margin-right:0.3rem;color:var(--gold)"></i>All Chennai</div><div class="stat-lbl">Areas We Serve</div></div>
 </div>
 
 <!-- AD BANNERS (hidden until the admin uploads one) -->
@@ -848,6 +852,14 @@ footer{background:var(--forest);padding:3rem 2rem 1.5rem}
     <div class="ad-dots" id="adDots"></div>
   </div>
 </section>
+
+<!-- LIVE LISTING NUMBERS (under the banner) -->
+<div class="stats-strip listing-stats">
+  <div class="stat-item stat-enter" style="animation-delay:0ms"><div class="stat-num" id="statTotal">0</div><div class="stat-lbl">Listings</div></div>
+  <div class="stat-item stat-enter" style="animation-delay:80ms"><div class="stat-num" id="statLand">0</div><div class="stat-lbl">Plots</div></div>
+  <div class="stat-item stat-enter" style="animation-delay:160ms"><div class="stat-num" id="statHouse">0</div><div class="stat-lbl">Houses &amp; Flats</div></div>
+  <div class="stat-item stat-enter" style="animation-delay:240ms"><div class="stat-num" id="statToday">0</div><div class="stat-lbl">For Rent</div></div>
+</div>
 
 <!-- SEARCH BAR -->
 <div style="max-width:1200px;margin:1.5rem auto 0;padding:0 1.5rem">
