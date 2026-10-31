@@ -490,7 +490,7 @@ onSnapshot(staffQ, snap => {
     </div>
     <div class="banner-help">
       <i class="fas fa-circle-info"></i>
-      <div>Banners slide on the home page, between the numbers and the search box, and are always shown <b>in full</b> — nothing is cut. <b>Banner size: 1500 × 300 px</b> (5:1). The banner always fills the full width; images of any other shape get their top and bottom trimmed to fit. Keep text away from the far left/right edges (arrows sit there). Turn a banner <b>off</b> to hide it without deleting.</div>
+      <div>Banners slide on the home page, between the numbers and the search box, and are always shown <b>in full</b> — nothing is cut. Banners are shown <b>in full</b> (nothing cut), at the same width as the page content. <b>Best size: 1500 × 500 px</b> (3:1) — use the same size for every banner so the slider keeps a steady height. Keep text away from the far left/right edges (arrows sit there). Turn a banner <b>off</b> to hide it without deleting.</div>
     </div>
     <div class="upload-progress-wrap" id="bannerProgressWrap">
       <div class="upload-progress-bar-bg"><div class="upload-progress-bar-fill" id="bannerBar"></div></div>
@@ -1388,7 +1388,7 @@ function renderBanners(){
     <div class="banner-item ${b.active === false ? 'off' : ''}">
       <div class="banner-thumb"><img src="${window.srImg(b.url, 900)}" alt=""></div>
       <div class="banner-meta">
-        ${b.width && b.height ? `<div class="banner-size"><i class="fas fa-expand"></i> ${b.width} × ${b.height} px — ${Math.abs(b.width / b.height - 5) < 0.3 ? 'perfect fit ✓' : 'not 5:1 — top/bottom will be trimmed; use 1500 × 300'}</div>` : ''}
+        ${b.width && b.height ? `<div class="banner-size"><i class="fas fa-expand"></i> ${b.width} × ${b.height} px — ${b.width / b.height < 1.8 ? 'quite tall — will take a lot of space; a wide banner looks best' : 'shown in full ✓'}</div>` : ''}
         <input class="f-input" placeholder="Title (optional, for your reference)" value="${esc(b.title)}" onchange="updateBanner('${b.firestoreId}',{title:this.value.trim()})">
         <input class="f-input" placeholder="Link when clicked (optional) e.g. ?property=440 or https://…" value="${esc(b.link)}" onchange="updateBanner('${b.firestoreId}',{link:this.value.trim()})">
         <div class="banner-actions">
@@ -1416,8 +1416,8 @@ async function handleBannerFiles(e){
     try {
       const blob = await compressImage(file, 2000, 0.9);
       const res = await uploadToCloudinary(blob, 'image', p => { bar.style.width = p + '%'; pct.textContent = p + '%'; }, 'banner-' + Date.now() + '.jpg');
-      if (res.width && res.height && Math.abs(res.width / res.height - 5) >= 0.3)
-        toast(`"${file.name}" is ${res.width} × ${res.height} — not 1500 × 300, so its top/bottom will be trimmed on the website.`, 'warning');
+      if (res.width && res.height && res.width / res.height < 1.8)
+        toast(`"${file.name}" is ${res.width} × ${res.height} — quite tall. It will show in full but take a lot of space; 1500 × 500 looks best.`, 'warning');
       const ref = doc(collection(window._db, 'banners'));
       await setDoc(ref, { url: res.secure_url, publicId: res.public_id, width: res.width || null, height: res.height || null,
                           title: '', link: '', active: true, order: ++order, createdAt: serverTimestamp() });
