@@ -65,3 +65,16 @@ body::after{content:"";position:fixed;inset:0;z-index:9500;pointer-events:none;o
   .sr-marquee-track,.sec-eyebrow::before,.about-section-eyebrow::before,.areas-served-eyebrow::before{animation:none}
   .sr-progress{display:none}
 }
+
+/* Footer icons: clear and bright on the blue footer */
+footer .footer-contact i,footer .footer-links i,footer a i{color:#5EEAD4!important;opacity:1!important}
+footer .footer-contact i{width:18px;text-align:center}
+
+/* "All Over Chennai" highlight in Areas We Serve */
+.area-card-all{background:linear-gradient(135deg,#1D4ED8,#1E3A8A)!important;border-color:transparent!important}
+.area-card-all .area-name{color:#fff!important}
+.area-card-all .area-tag{color:#5EEAD4!important}
+.area-card-all .area-icon{background:rgba(255,255,255,.14)!important;color:#5EEAD4!important}
+.area-card-all .area-icon i{color:#5EEAD4!important}
+.area-chip-all{background:linear-gradient(135deg,#1D4ED8,#1E3A8A)!important;color:#fff!important;border-color:transparent!important}
+.area-chip-all i{color:#5EEAD4!important}
