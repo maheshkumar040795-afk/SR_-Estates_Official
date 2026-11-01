@@ -13,6 +13,30 @@
     bar.className = 'sr-progress';
     document.body.appendChild(bar);
 
+    /* light / dark toggle */
+    var navEl = document.querySelector('.cinematic-nav');
+    if (navEl && !document.querySelector('.sr-theme-toggle')) {
+      var t = document.createElement('button');
+      t.type = 'button';
+      t.className = 'sr-theme-toggle';
+      t.innerHTML = '<i class="fas fa-moon" aria-hidden="true"></i><i class="fas fa-sun" aria-hidden="true"></i>';
+      var setLabel = function () {
+        var dark = doc.getAttribute('data-theme') === 'dark';
+        t.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+        t.title = dark ? 'Light mode' : 'Dark mode';
+      };
+      setLabel();
+      t.addEventListener('click', function () {
+        var dark = doc.getAttribute('data-theme') !== 'dark';
+        doc.classList.add('sr-theme-anim');
+        if (dark) doc.setAttribute('data-theme', 'dark'); else doc.removeAttribute('data-theme');
+        try { localStorage.setItem('srTheme', dark ? 'dark' : 'light'); } catch (e) {}
+        setLabel();
+        setTimeout(function () { doc.classList.remove('sr-theme-anim'); }, 450);
+      });
+      navEl.appendChild(t);
+    }
+
     /* scroll progress only (menu stays at the top, it does not follow the scroll) */
     function onScroll() {
       var y = window.scrollY;
