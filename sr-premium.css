@@ -126,3 +126,10 @@ html[data-theme="dark"] footer{background:#0E1A33!important}
 html[data-theme="dark"] .sr-marquee{background:#060C18}
 html[data-theme="dark"] .hero-video-grad{background:radial-gradient(ellipse 55% 38% at 50% 42%,rgba(8,24,48,0.26),transparent 80%),linear-gradient(to bottom,rgba(10,32,62,0.32) 0%,rgba(10,32,62,0.12) 22%,rgba(10,32,62,0.08) 70%,rgba(11,18,32,0.7) 92%,#0B1220 100%)!important}
 html[data-theme="dark"] .area-card-all,html[data-theme="dark"] .area-chip-all{background:linear-gradient(135deg,#1D4ED8,#1E3A8A)!important}
+
+/* Business highlights strip (22+ / 1200+ / 600+ / All Chennai): deep navy band */
+.stats-strip.biz-stats{background:#1C2E43!important;border-color:#1C2E43!important;border-top:1px solid rgba(94,234,212,.18)!important;border-bottom:1px solid rgba(94,234,212,.18)!important}
+.biz-stats .stat-num{color:#FFFFFF!important}
+.biz-stats .stat-num i{color:#2DD4BF!important}
+.biz-stats .stat-lbl{color:#5EEAD4!important;opacity:.95}
+html[data-theme="dark"] .stats-strip.biz-stats{background:#1C2E43!important}
