@@ -745,6 +745,11 @@ footer .footer-title{color:#5EEAD4!important}
 footer .footer-copy{color:rgba(255,255,255,0.75)!important}
 footer i{opacity:1!important}
 .hero-gold{color:#4FF0DA!important}
+.card-video-btn{flex-shrink:0;display:inline-flex;align-items:center;gap:0.3rem;margin-left:auto;padding:0.22rem 0.6rem;border-radius:999px;border:1px solid rgba(255,0,0,0.35);background:rgba(255,0,0,0.07);color:#E00000;font:700 0.75rem/1 'Manrope',sans-serif;cursor:pointer;transition:background 0.2s,transform 0.2s}
+.card-video-btn:hover{background:#FF0000;color:#fff;transform:translateY(-1px)}
+.card-video-btn:active{transform:scale(0.96)}
+.video-block{border-radius:14px;transition:box-shadow 0.4s ease}
+.video-block.video-focus{box-shadow:0 0 0 3px rgba(255,0,0,0.55),0 0 0 9px rgba(255,0,0,0.12)}
 </style>
 <script type="application/ld+json">
 {
@@ -1536,7 +1541,7 @@ function renderSection(sec) {
           ${postedDate ? `<div style="font-size:0.72rem;color:var(--muted);display:flex;align-items:center;gap:0.25rem"><i class="fas fa-calendar-alt" style="color:var(--sage);font-size:0.68rem"></i>${postedDate}</div>` : ''}
         </div>
         <div class="card-title">${l.title}</div>
-        <div class="card-loc"><i class="fas fa-map-marker-alt"></i><span class="card-loc-text" title="${l.location||'Chennai'}">${l.location||'Chennai'}${l.city ? ', '+l.city : ''}</span>${srYoutubeId(l.videoUrl) ? ' <span style="flex-shrink:0;color:#FF0000;font-size:0.75rem;font-weight:700"><i class="fab fa-youtube"></i> Video</span>' : ''}</div>
+        <div class="card-loc"><i class="fas fa-map-marker-alt"></i><span class="card-loc-text" title="${l.location||'Chennai'}">${l.location||'Chennai'}${l.city ? ', '+l.city : ''}</span>${srYoutubeId(l.videoUrl) ? ` <button type="button" class="card-video-btn" onclick="event.stopPropagation();openDetail('${l.id}', true)" title="Watch the video of this property" aria-label="Watch property video"><i class="fab fa-youtube"></i> Video</button>` : ''}</div>
         <div class="card-specs">
           <div class="spec-item" style="grid-column:1/-1"><i class="fas fa-ruler-combined"></i> <span class="spec-text">${l.size||'N/A'}</span></div>
           ${l.facing ? `<div class="spec-item"><i class="fas fa-compass"></i> ${l.facing}</div>` : ''}
@@ -1631,7 +1636,7 @@ function buildYoutubePlayer(url) {
     </div>`;
 }
 
-function openDetail(id) {
+function openDetail(id, showVideo) {
   currentDetailId = id;
   galIndex = 0;
   const l = listings.find(x => x.id === id);
@@ -1710,6 +1715,19 @@ function openDetail(id) {
     </div>`;
   document.getElementById('detailModal').classList.add('open');
   document.body.style.overflow = 'hidden';
+  const box = document.querySelector('#detailModal .modal');
+  if (box) box.scrollTop = 0;
+  if (showVideo === true) {
+    // jump straight to the video tour; the visitor taps play when they want
+    setTimeout(() => {
+      const vb = document.querySelector('#modalContent .video-block');
+      if (!vb || !box) return;
+      const top = vb.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop - 12;
+      box.scrollTo({ top, behavior: 'smooth' });
+      vb.classList.add('video-focus');
+      setTimeout(() => vb.classList.remove('video-focus'), 2200);
+    }, 120);
+  }
 }
 
 function renderGallery(images) {
