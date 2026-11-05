@@ -140,3 +140,16 @@ html[data-theme="dark"] .stats-strip.biz-stats{background:#1C2E43!important}
 .insta-chooser-item[href*="facebook"] i{background:#1877F2!important}
 .insta-chooser-item[href*="youtube"] i{background:#FF0000!important}
 .insta-chooser-item[href*="twitter"] i,.insta-chooser-item[href*="x.com"] i{background:#000!important;border:1px solid rgba(255,255,255,.25)}
+
+/* Top menu bar: deep navy */
+.cinematic-nav{background:rgba(27,45,66,.94)!important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+
+/* Floating buttons: call, WhatsApp, then each social network, Google review last */
+.fab-container{flex-direction:column!important}
+.fab-call{order:1}.fab-whatsapp{order:2}.fab-ig{order:3}.fab-fb{order:4}.fab-yt{order:5}.fab-x{order:6}.fab-google{order:7}
+.fab-social{width:44px!important;height:44px!important;font-size:1.15rem!important;margin-right:3px}
+.fab-ig{background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285AEB 90%)!important}
+.fab-fb{background:#1877F2!important}
+.fab-yt{background:#FF0000!important}
+.fab-x{background:#000!important;border:1px solid rgba(255,255,255,.3)}
+@media(max-width:768px){.fab-container{gap:.45rem!important}.fab-social{width:38px!important;height:38px!important;font-size:1rem!important}}

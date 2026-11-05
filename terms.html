@@ -228,7 +228,7 @@ footer .footer-copy{color:rgba(255,255,255,0.75)!important}
 footer i{opacity:1!important}
 </style>
 <script>try{if(localStorage.getItem('srTheme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
-<link rel="stylesheet" href="sr-premium.css?v=7">
+<link rel="stylesheet" href="sr-premium.css?v=8">
 </head>
 <body>
 
@@ -370,24 +370,10 @@ footer i{opacity:1!important}
   <a class="fab-item fab-google" href="https://share.google/8GnwM5JiUPGzglwR6" target="_blank" rel="noopener" title="Rate us on Google" aria-label="Write a Google review"><i class="fab fa-google"></i><span class="fab-tip">★ Rate us on Google</span></a>
   <a class="fab-item fab-call" href="tel:+919841436766" title="Call Now"><i class="fas fa-phone"></i></a>
   <a class="fab-item fab-whatsapp" href="https://wa.me/919841436766?text=Hello%20SR%20Estates%2C%20I%20would%20like%20to%20enquire%20about%20your%20properties." target="_blank" rel="noopener" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-  <div class="fab-insta-wrap">
-    <button type="button" class="fab-item fab-instagram" id="fabInstaBtn" onclick="toggleInstaChooser()" title="More ways to reach us" aria-haspopup="true" aria-expanded="false"><i class="fas fa-share-alt"></i></button>
-    <div class="insta-chooser" id="instaChooser">
-      <div class="insta-chooser-title">Follow / Reach Us</div>
-      <a href="https://www.instagram.com/srestates_75/" target="_blank" rel="noopener" class="insta-chooser-item">
-        <i class="fab fa-instagram"></i> <span>Instagram</span>
-      </a>
-      <a href="https://www.facebook.com/srestates.rakesh/" target="_blank" rel="noopener" class="insta-chooser-item">
-        <i class="fab fa-facebook"></i> <span>Facebook</span>
-      </a>
-      <a href="https://youtube.com/@srestates6947" target="_blank" rel="noopener" class="insta-chooser-item">
-        <i class="fab fa-youtube"></i> <span>YouTube</span>
-      </a>
-      <a href="https://twitter.com/srestates_sr" target="_blank" rel="noopener" class="insta-chooser-item">
-        <i class="fab fa-x-twitter"></i> <span>X (Twitter)</span>
-      </a>
-    </div>
-  </div>
+  <a class="fab-item fab-social fab-ig" href="https://www.instagram.com/srestates_75/" target="_blank" rel="noopener" title="Instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+  <a class="fab-item fab-social fab-fb" href="https://www.facebook.com/srestates.rakesh/" target="_blank" rel="noopener" title="Facebook" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+  <a class="fab-item fab-social fab-yt" href="https://youtube.com/@srestates6947" target="_blank" rel="noopener" title="YouTube" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+  <a class="fab-item fab-social fab-x" href="https://twitter.com/srestates_sr" target="_blank" rel="noopener" title="X (Twitter)" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
 </div>
 
 <script>
@@ -433,6 +419,7 @@ document.addEventListener('click', function(e){
 function toggleInstaChooser(){
   var chooser = document.getElementById('instaChooser');
   var btn = document.getElementById('fabInstaBtn');
+  if(!chooser || !btn) return;
   var isOpen = chooser.classList.toggle('open');
   btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 }
@@ -446,6 +433,6 @@ document.addEventListener('click', function(e){
   }
 });
 </script>
-<script src="sr-premium.js?v=7" defer></script>
+<script src="sr-premium.js?v=8" defer></script>
 </body>
 </html>
